@@ -162,6 +162,9 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
     success = parentItem->insertChildren(position, rows, rootItem->columnCount());
     endInsertRows();
 
+	if (success)
+		connect(parentItem, &TreeItem::changeOfNodeValueAttempted, this, &TreeModel::on_ChangeOfNodeValueAttempted);
+
     return success;
 }
 
@@ -294,4 +297,10 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 
         ++number;
     }
+}
+
+void TreeModel::on_ChangeOfNodeValueAttempted(const QVariant &var)
+{
+	int dupa = 0;
+	return;
 }

@@ -101,6 +101,9 @@ private:
     TreeItem *getItem(const QModelIndex &index) const;
 
     TreeItem *rootItem;
+
+public slots:
+	void on_ChangeOfNodeValueAttempted(const QVariant &var);
 };
 //! [2]
 

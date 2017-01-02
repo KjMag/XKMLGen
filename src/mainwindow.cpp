@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
     setupUi(this);
 
     QStringList headers;
-    headers << tr("Title") << tr("Description");
+    headers << tr("Element/Node name") << tr("Element value") << tr("Attribute name") << tr("Attribute value");
 
     QFile file(":/default.txt");
     file.open(QIODevice::ReadOnly);

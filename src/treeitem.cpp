@@ -59,7 +59,8 @@
 #include <QStringList>
 
 //! [0]
-TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent)
+TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qparent)
+	: QObject(qparent)
 {
     parentItem = parent;
     itemData = data;
@@ -183,7 +184,15 @@ bool TreeItem::setData(int column, const QVariant &value)
     if (column < 0 || column >= itemData.size())
         return false;
 
-    itemData[column] = value;
-    return true;
+	if (childCount() == 0 || column != 1)
+	{
+		itemData[column] = value;
+		return true;
+	}
+	else 
+	{
+		emit changeOfNodeValueAttempted(itemData[0]);
+		return false;
+	}
 }
 //! [11]

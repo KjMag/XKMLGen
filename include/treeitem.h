@@ -56,10 +56,15 @@
 #include <QVector>
 
 //! [0]
-class TreeItem
+class TreeItem : public QObject
 {
+	Q_OBJECT
+
+signals:
+	void changeOfNodeValueAttempted(const QVariant&);
+
 public:
-    explicit TreeItem(const QVector<QVariant> &data, TreeItem *parent = 0);
+    explicit TreeItem(const QVector<QVariant> &data, TreeItem *parent = 0, QObject *qparent = 0);
     ~TreeItem();
 
     TreeItem *child(int number);
