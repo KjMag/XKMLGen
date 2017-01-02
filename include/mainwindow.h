@@ -67,11 +67,14 @@ public slots:
     void updateActions();
 
 private slots:
+	bool saveXML();
+	bool openXML();
     void insertChild();
     bool insertColumn();
     void insertRow();
     bool removeColumn();
     void removeRow();
+	
 };
 
 #endif // MAINWINDOW_H

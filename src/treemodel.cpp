@@ -308,3 +308,58 @@ void TreeModel::on_ChangeOfNodeValueAttempted(const QVariant &var)
 	msgBox.exec();
 	return;
 }
+
+bool TreeModel::saveTreeViewAsXMLfile(const QString& filepath) const
+{
+	if (filepath == "")
+		return false;
+	QFile file(filepath);
+	bool success = file.open(QIODevice::WriteOnly);
+	if (!success)
+		return false;
+
+	QXmlStreamWriter xml_writer(&file);
+	xml_writer.setAutoFormatting(true);
+	writeTreeViewAsXML(xml_writer);
+
+	file.close();
+
+	return !xml_writer.hasError();
+}
+
+bool TreeModel::writeTreeViewAsXML(QXmlStreamWriter& writer) const
+{
+	writer.writeStartDocument();
+
+	int childCount = rootItem->childCount();
+	for (int i = 0; i < childCount; ++i)
+	{
+		TreeItem* item = rootItem->child(i);
+		writeTreeItemAsXML(item, writer);
+	}
+
+	writer.writeEndDocument();
+
+	return true;
+}
+
+void TreeModel::writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const
+{
+	if (startItem == nullptr)
+		return;
+
+	int childCount = startItem->childCount();
+	if (childCount == 0)
+		writer.writeTextElement(startItem->data(0).toString(), startItem->data(1).toString());
+	else
+	{
+		writer.writeStartElement(startItem->data(0).toString());
+		for (int i = 0; i < childCount; ++i)
+		{
+			TreeItem* const item = startItem->child(i);
+			writeTreeItemAsXML(item, writer);
+		}
+	}
+
+	return;
+}

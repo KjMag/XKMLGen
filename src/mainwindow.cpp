@@ -52,6 +52,7 @@
 #include "treemodel.h"
 
 #include <QFile>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -75,7 +76,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(view->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &MainWindow::updateActions);
 
-    connect(actionsMenu, &QMenu::aboutToShow, this, &MainWindow::updateActions);
+	connect(save_XML_action, &QAction::triggered, this, &MainWindow::saveXML);
+	connect(open_XML_action, &QAction::triggered, this, &MainWindow::openXML);
+
+    connect(editMenu, &QMenu::aboutToShow, this, &MainWindow::updateActions);
     connect(insertRowAction, &QAction::triggered, this, &MainWindow::insertRow);
     connect(insertColumnAction, &QAction::triggered, this, &MainWindow::insertColumn);
     connect(removeRowAction, &QAction::triggered, this, &MainWindow::removeRow);
@@ -83,6 +87,20 @@ MainWindow::MainWindow(QWidget *parent)
     connect(insertChildAction, &QAction::triggered, this, &MainWindow::insertChild);
 
     updateActions();
+}
+
+bool MainWindow::saveXML()
+{
+	QString filepath = QFileDialog::getSaveFileName(this, tr("Save XML"));
+	if (filepath == "")
+		return false;
+	TreeModel* mod = static_cast<TreeModel*>(this->view->model());
+	return mod->saveTreeViewAsXMLfile(filepath);
+}
+
+bool MainWindow::openXML()
+{
+	return false;
 }
 
 void MainWindow::insertChild()

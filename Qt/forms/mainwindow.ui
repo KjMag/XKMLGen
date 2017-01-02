@@ -65,10 +65,12 @@
      <string>&amp;File</string>
     </property>
     <addaction name="exitAction"/>
+    <addaction name="save_XML_action"/>
+    <addaction name="open_XML_action"/>
    </widget>
-   <widget class="QMenu" name="actionsMenu">
+   <widget class="QMenu" name="editMenu">
     <property name="title">
-     <string>&amp;Actions</string>
+     <string>&amp;Edit</string>
     </property>
     <addaction name="insertRowAction"/>
     <addaction name="insertColumnAction"/>
@@ -79,7 +81,7 @@
     <addaction name="insertChildAction"/>
    </widget>
    <addaction name="fileMenu"/>
-   <addaction name="actionsMenu"/>
+   <addaction name="editMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="exitAction">
@@ -128,6 +130,16 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="save_XML_action">
+   <property name="text">
+    <string>Save XML</string>
+   </property>
+  </action>
+  <action name="open_XML_action">
+   <property name="text">
+    <string>Open XML</string>
    </property>
   </action>
  </widget>

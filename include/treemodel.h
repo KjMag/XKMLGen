@@ -54,6 +54,7 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
+#include <QXMLStreamWriter>
 
 class TreeItem;
 
@@ -95,6 +96,10 @@ public:
                     const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
     bool removeRows(int position, int rows,
                     const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
+
+	bool saveTreeViewAsXMLfile(const QString & filepath) const;
+	bool writeTreeViewAsXML(QXmlStreamWriter & writer) const;
+	void writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const;
 
 private:
     void setupModelData(const QStringList &lines, TreeItem *parent);
