@@ -359,6 +359,7 @@ void TreeModel::writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter &
 			TreeItem* const item = startItem->child(i);
 			writeTreeItemAsXML(item, writer);
 		}
+		writer.writeEndElement();
 	}
 
 	return;

@@ -99,9 +99,13 @@ public:
 
 	bool saveTreeViewAsXMLfile(const QString & filepath) const;
 	bool writeTreeViewAsXML(QXmlStreamWriter & writer) const;
-	void writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const;
 
 private:
+	// This function is intended to be used together with writeTreeViewAsXML() function as
+	// it is assumed that before this function is called, QXMLStreamWriter::writeStartDocument()
+	// function had already been called, and that the code invoking the function calls
+	// XMLStreamWriter::writeEndDocument() afterwards:
+	void writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const;
     void setupModelData(const QStringList &lines, TreeItem *parent);
     TreeItem *getItem(const QModelIndex &index) const;
 
