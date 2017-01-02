@@ -157,12 +157,12 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
     TreeItem *parentItem = getItem(parent);
     bool success;
-
+	int children_pre = parentItem->childCount();
     beginInsertRows(parent, position, position + rows - 1);
     success = parentItem->insertChildren(position, rows, rootItem->columnCount());
     endInsertRows();
 
-	if (success)
+	if (success && (children_pre == 0))
 		connect(parentItem, &TreeItem::changeOfNodeValueAttempted, this, &TreeModel::on_ChangeOfNodeValueAttempted);
 
     return success;
@@ -279,6 +279,7 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 
                 if (parents.last()->childCount() > 0) {
                     parents << parents.last()->child(parents.last()->childCount()-1);
+					connect(parents.last(), &TreeItem::changeOfNodeValueAttempted, this, &TreeModel::on_ChangeOfNodeValueAttempted);
                     indentations << position;
                 }
             } else {
@@ -291,8 +292,8 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
             // Append a new item to the current parent's list of children.
             TreeItem *parent = parents.last();
             parent->insertChildren(parent->childCount(), 1, rootItem->columnCount());
-            for (int column = 0; column < columnData.size(); ++column)
-                parent->child(parent->childCount() - 1)->setData(column, columnData[column]);
+			for (int column = 0; column < columnData.size(); ++column)
+				parent->child(parent->childCount() - 1)->setData(column, columnData[column]);
         }
 
         ++number;
@@ -301,6 +302,9 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 
 void TreeModel::on_ChangeOfNodeValueAttempted(const QVariant &var)
 {
-	int dupa = 0;
+	QMessageBox msgBox;
+	msgBox.setText("The entry: \"" + var.toString() + "\" is a node. Nodes can't be assigned values."
+		" Remove its children elements in order to assign value to this entry.");
+	msgBox.exec();
 	return;
 }
