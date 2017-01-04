@@ -1,3 +1,3 @@
-Sample node						
-    Sample element 1			Sample value 1
-    Sample element 2			Sample value 2
+Sample_node						
+    Sample_element_1			Sample value 1
+    Sample_element_2			Sample value 2

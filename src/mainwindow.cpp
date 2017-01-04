@@ -104,7 +104,10 @@ bool MainWindow::openXML()
 	if (filepath == "")
 		return false;
 	TreeModel* mod = static_cast<TreeModel*>(this->view->model());
-	return mod->loadXMLfileAsTreeView(filepath);
+	bool success = mod->loadXMLfileAsTreeView(filepath);
+	if (success)
+		updateActions();
+	return success;
 }
 
 void MainWindow::insertChild()
@@ -122,9 +125,9 @@ void MainWindow::insertChild()
 
     for (int column = 0; column < model->columnCount(index); ++column) {
         QModelIndex child = model->index(0, column, index);
-        model->setData(child, QVariant("[No data]"), Qt::EditRole);
+        model->setData(child, QVariant("No_data"), Qt::EditRole);
         if (!model->headerData(column, Qt::Horizontal).isValid())
-            model->setHeaderData(column, Qt::Horizontal, QVariant("[No header]"), Qt::EditRole);
+            model->setHeaderData(column, Qt::Horizontal, QVariant("No_header"), Qt::EditRole);
     }
 
     view->selectionModel()->setCurrentIndex(model->index(0, 0, index),
@@ -140,7 +143,7 @@ bool MainWindow::insertColumn()
     // Insert a column in the parent item.
     bool changed = model->insertColumn(column + 1);
     if (changed)
-        model->setHeaderData(column + 1, Qt::Horizontal, QVariant("[No header]"), Qt::EditRole);
+        model->setHeaderData(column + 1, Qt::Horizontal, QVariant("No_header"), Qt::EditRole);
 
     updateActions();
 
@@ -159,7 +162,7 @@ void MainWindow::insertRow()
 
     for (int column = 0; column < model->columnCount(index.parent()); ++column) {
         QModelIndex child = model->index(index.row()+1, column, index.parent());
-        model->setData(child, QVariant("[No data]"), Qt::EditRole);
+        model->setData(child, QVariant("No_data"), Qt::EditRole);
     }
 }
 

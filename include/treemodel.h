@@ -104,14 +104,16 @@ public:
 	bool loadXMLfileAsTreeView(const QString & filepath);
 	bool writeXMLtoTreeView(QXmlStreamReader & reader);
 
-	bool writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem * const item, int position, const int columns);
-
 private:
 	// This function is intended to be used together with writeTreeViewAsXML() function as
 	// it is assumed that before this function is called, QXMLStreamWriter::writeStartDocument()
 	// function had already been called, and that the code invoking the function calls
 	// XMLStreamWriter::writeEndDocument() afterwards:
 	void writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const;
+	// This function is intended to be used together with writeXMLtoTreeView() function as
+	// it is assumed that before this function is called, QXmlStreamReader::readNext()
+	// function had already been called once in order to parse the XML header:
+	bool writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem * const item, int position, const int columns);
     void setupModelData(const QStringList &lines, TreeItem *parent);
     TreeItem *getItem(const QModelIndex &index) const;
 
