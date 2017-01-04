@@ -64,7 +64,7 @@ signals:
 	void changeOfNodeValueAttempted(const QVariant&);
 
 public:
-    explicit TreeItem(const QVector<QVariant> &data, TreeItem *parent = 0, QObject *qparent = 0);
+    explicit TreeItem(const QVector<QVariant> &data, TreeItem *parent = 0, QObject *qparent = 0, bool header_item = false);
     ~TreeItem();
 
     TreeItem *child(int number);
@@ -80,6 +80,7 @@ public:
     bool setData(int column, const QVariant &value);
 
 private:
+	bool is_header_item;
     QList<TreeItem*> childItems;
     QVector<QVariant> itemData;
     TreeItem *parentItem;

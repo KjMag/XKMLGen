@@ -59,8 +59,9 @@
 #include <QStringList>
 
 //! [0]
-TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qparent)
+TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qparent, bool header_item)
 	: QObject(qparent)
+	, is_header_item(header_item)
 {
     parentItem = parent;
     itemData = data;
@@ -117,6 +118,8 @@ bool TreeItem::insertChildren(int position, int count, int columns)
 {
     if (position < 0 || position > childItems.size())
         return false;
+	if (childItems.size() == 0 && !is_header_item)
+		this->setData(1, QVariant(""));
 
     for (int row = 0; row < count; ++row) {
         QVector<QVariant> data(columns);
