@@ -53,6 +53,7 @@
 
 #include <QFile>
 #include <QFileDialog>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -103,10 +104,15 @@ bool MainWindow::openXML()
 	QString filepath = QFileDialog::getOpenFileName(this, tr("Open XML"));
 	if (filepath == "")
 		return false;
+
 	TreeModel* mod = static_cast<TreeModel*>(this->view->model());
 	bool success = mod->loadXMLfileAsTreeView(filepath);
 	if (success)
 		updateActions();
+	else
+		QMessageBox::information(this, "XKMLGen", tr("The XML file could not be loaded correctly.\nCheck whether"
+			" the file contains well-formed XML content."));
+
 	return success;
 }
 
