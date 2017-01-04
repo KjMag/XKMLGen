@@ -49,6 +49,7 @@
 ****************************************************************************/
 
 #include <QtWidgets>
+#include <QXMLStreamReader>
 
 #include "treeitem.h"
 #include "treemodel.h"
@@ -70,6 +71,15 @@ TreeModel::TreeModel(const QStringList &headers, const QString &data, QObject *p
 TreeModel::~TreeModel()
 {
     delete rootItem;
+}
+
+void TreeModel::setRootItem(TreeItem * root)
+{
+	TreeItem* tmp = rootItem; 
+	rootItem = root; 
+	delete tmp;
+
+	return;
 }
 //! [1]
 
@@ -341,6 +351,99 @@ bool TreeModel::writeTreeViewAsXML(QXmlStreamWriter& writer) const
 	writer.writeEndDocument();
 
 	return true;
+}
+
+bool TreeModel::loadXMLfileAsTreeView(const QString & filepath)
+{
+	if (filepath == "")
+		return false;
+	QFile file(filepath);
+	bool success = file.open(QIODevice::ReadOnly);
+	if (!success)
+		return false;
+	QXmlStreamReader xml_reader(&file);
+	writeXMLtoTreeView(xml_reader);
+
+	return !xml_reader.hasError();
+}
+
+bool TreeModel::writeXMLtoTreeView(QXmlStreamReader & reader)
+{
+	while (!reader.atEnd())
+	{
+		reader.readNext();
+		if (!reader.isStartDocument())
+		{
+			QMessageBox::StandardButton answer = QMessageBox::warning(nullptr, tr("XKMLGen"),
+				tr("XML header missing. If you are sure that the file contains otherwise well-formed"
+					" XML 1.0 content, you may try to load it anyway.\n"
+					"Are you sure that you want to load this file?"),
+				QMessageBox::Yes | QMessageBox::No);
+
+			if (answer == QMessageBox::No)
+			{
+				return false;
+			}
+		}
+		if (reader.isStartDocument() && reader.documentVersion() != "1.0")
+		{
+			QMessageBox::StandardButton answer = QMessageBox::warning(nullptr, tr("XKMLGen"),
+				tr("This program supports XML ver. 1.0 only. The version of the file you are"
+					" trying to load is different, which means that some content may not be"
+					" parsed correctly. Do you want to proceed?"),
+				QMessageBox::Yes | QMessageBox::No);
+			
+			if (answer == QMessageBox::No)
+			{
+				return false;
+			}
+		}
+		else
+		{
+			reader.readNext();
+		}
+
+		QStringList headers;
+		headers << tr("Element/Node name") << tr("Element value") << tr("Attribute name") << tr("Attribute value");
+		QVector<QVariant> rootData;
+		foreach(QString header, headers)
+			rootData << header;
+
+		TreeItem* root = new TreeItem(rootData);
+
+		int position = 0;
+
+	}
+	return false;
+}
+
+bool TreeModel::writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem* const item, int position, const int columns)
+{
+	QXmlStreamReader::TokenType tokenType = reader.tokenType();
+	switch (tokenType)
+	{
+	case QXmlStreamReader::StartElement:
+		item->insertChildren(position++, 1, columns);
+		item->setData(0, QVariant(reader.name().toString()));
+		bool success = writeXmlToTreeItem(reader, item, position, columns);
+		if (success == false)
+			return false;
+		break;
+	case QXmlStreamReader::EndElement:
+		break; /////
+	case QXmlStreamReader::Characters:
+		item->setData(1, QVariant(reader.name().toString()));
+		reader.readNext();
+		break;
+	case QXmlStreamReader::EndDocument:
+		return reader.hasError();
+	case QXmlStreamReader::Invalid:
+		delete item;
+		return false;
+	default:
+		reader.readNext();
+		break;
+	}
 }
 
 void TreeModel::writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const

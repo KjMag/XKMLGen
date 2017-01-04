@@ -100,7 +100,11 @@ bool MainWindow::saveXML()
 
 bool MainWindow::openXML()
 {
-	return false;
+	QString filepath = QFileDialog::getOpenFileName(this, tr("Open XML"));
+	if (filepath == "")
+		return false;
+	TreeModel* mod = static_cast<TreeModel*>(this->view->model());
+	return mod->loadXMLfileAsTreeView(filepath);
 }
 
 void MainWindow::insertChild()

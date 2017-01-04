@@ -64,8 +64,7 @@ class TreeModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    TreeModel(const QStringList &headers, const QString &data,
-              QObject *parent = 0);
+    TreeModel(const QStringList &headers, const QString &data = "", QObject *parent = 0);
     ~TreeModel();
 //! [0] //! [1]
 
@@ -76,6 +75,8 @@ public:
     QModelIndex index(int row, int column,
                       const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     QModelIndex parent(const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+	void setRootItem(TreeItem* root);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
     int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
@@ -97,8 +98,13 @@ public:
     bool removeRows(int position, int rows,
                     const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
 
+	// XML I/O utilities
 	bool saveTreeViewAsXMLfile(const QString & filepath) const;
 	bool writeTreeViewAsXML(QXmlStreamWriter & writer) const;
+	bool loadXMLfileAsTreeView(const QString & filepath);
+	bool writeXMLtoTreeView(QXmlStreamReader & reader);
+
+	bool writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem * const item, int position, const int columns);
 
 private:
 	// This function is intended to be used together with writeTreeViewAsXML() function as
