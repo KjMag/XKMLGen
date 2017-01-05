@@ -82,8 +82,6 @@ namespace tln
 				const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 			QModelIndex parent(const QModelIndex &index) const Q_DECL_OVERRIDE;
 
-			void setRootItem(TreeItem* root);
-
 			int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 			int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 			//! [1]
@@ -104,11 +102,17 @@ namespace tln
 			bool removeRows(int position, int rows,
 				const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
 
+			void setRootItem(TreeItem* root);
+			void cutDownTree();
+
 			// XML I/O utilities
 			bool saveTreeViewAsXMLfile(const QString & filepath) const;
 			bool writeTreeViewAsXML(QXmlStreamWriter & writer) const;
 			bool loadXMLfileAsTreeView(const QString & filepath);
 			bool writeXMLtoTreeView(QXmlStreamReader & reader);
+
+		public slots:
+			void on_ChangeOfNodeValueAttempted(const QVariant &var);
 
 		private:
 			// This function is intended to be used together with writeTreeViewAsXML() function as
@@ -124,9 +128,6 @@ namespace tln
 			TreeItem *getItem(const QModelIndex &index) const;
 
 			TreeItem *rootItem;
-
-			public slots:
-			void on_ChangeOfNodeValueAttempted(const QVariant &var);
 		};
 			//! [2]
 		} // namespace gui

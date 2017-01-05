@@ -316,6 +316,17 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
     }
 }
 
+void TreeModel::cutDownTree()
+{
+	if (rootItem == nullptr)
+		return;
+	beginResetModel();
+	rootItem->removeChildren(0, rootItem->childCount());
+	endResetModel();
+
+	return;
+}
+
 void TreeModel::on_ChangeOfNodeValueAttempted(const QVariant &var)
 {
 	QMessageBox msgBox;
@@ -407,7 +418,7 @@ bool TreeModel::writeXMLtoTreeView(QXmlStreamReader & reader)
 	foreach(QString header, headers)
 		rootData << header;
 
-	TreeItem* root = new TreeItem(rootData);
+	TreeItem* root = new TreeItem(rootData, nullptr, nullptr, true);
 	int position = 0;
 	bool success = writeXmlToTreeItem(reader, root, position, rootData.size());
 	if (success)

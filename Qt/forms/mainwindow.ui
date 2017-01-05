@@ -79,6 +79,8 @@
     <addaction name="removeColumnAction"/>
     <addaction name="separator"/>
     <addaction name="insertChildAction"/>
+    <addaction name="separator"/>
+    <addaction name="clearAllAction"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="editMenu"/>
@@ -140,6 +142,17 @@
   <action name="open_XML_action">
    <property name="text">
     <string>Open XML</string>
+   </property>
+  </action>
+  <action name="clearAllAction">
+   <property name="text">
+    <string>Clear All</string>
+   </property>
+   <property name="toolTip">
+    <string>Removes all entered XML elements</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
  </widget>

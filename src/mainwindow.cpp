@@ -89,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(removeRowAction, &QAction::triggered, this, &MainWindow::removeRow);
     connect(removeColumnAction, &QAction::triggered, this, &MainWindow::removeColumn);
     connect(insertChildAction, &QAction::triggered, this, &MainWindow::insertChild);
+	connect(clearAllAction, &QAction::triggered, this, &MainWindow::clearAll);
 
     updateActions();
 }
@@ -195,6 +196,13 @@ void MainWindow::removeRow()
     QAbstractItemModel *model = view->model();
     if (model->removeRow(index.row(), index.parent()))
         updateActions();
+}
+
+void MainWindow::clearAll()
+{
+	TreeModel* mod = static_cast<TreeModel*>(this->view->model());
+	mod->cutDownTree();
+	return;
 }
 
 void MainWindow::updateActions()
