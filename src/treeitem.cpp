@@ -57,13 +57,18 @@
 #include "treeitem.h"
 
 #include <QStringList>
+#include <QMessageBox>
+
+
 
 //! [0]
 TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qparent, bool header_item)
 	: QObject(qparent)
 	, is_header_item(header_item)
+	, forbidden_tag_name_characters(R"(^:\-\+\.\,!@#$%&*;~`"'<>\^\(\)\\/\|\?\[\]\{\})")
+	, tag_name_validator(QRegularExpression("[^0-9" + forbidden_tag_name_characters + "][" + forbidden_tag_name_characters + "]*"))
 {
-    parentItem = parent;
+	parentItem = parent;
     itemData = data;
 }
 //! [0]
@@ -187,15 +192,31 @@ bool TreeItem::setData(int column, const QVariant &value)
     if (column < 0 || column >= itemData.size())
         return false;
 
+	bool success = true;
 	if (childCount() == 0 || column != 1)
 	{
-		itemData[column] = value;
-		return true;
+		if (column == 0)
+		{
+			int pos = 0;
+			QValidator::State state = tag_name_validator.validate(value.toString(), pos);
+			if (state == QValidator::Acceptable)
+				itemData[column] = value;
+			else
+			{
+				QMessageBox::information(nullptr, "XKMLGen", tr("Incorrect tag name."));
+				success = false;
+			}
+		}
+		else
+		{
+			itemData[column] = value;
+		}
 	}
 	else 
 	{
 		emit changeOfNodeValueAttempted(itemData[0]);
-		return false;
+		success = false;
 	}
+	return success;
 }
 //! [11]

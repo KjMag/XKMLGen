@@ -54,6 +54,7 @@
 #include <QList>
 #include <QVariant>
 #include <QVector>
+#include <QRegularExpressionValidator>
 
 //! [0]
 class TreeItem : public QObject
@@ -80,10 +81,12 @@ public:
     bool setData(int column, const QVariant &value);
 
 private:
-	bool is_header_item;
+	const QString forbidden_tag_name_characters;
+	QRegularExpressionValidator tag_name_validator;
     QList<TreeItem*> childItems;
     QVector<QVariant> itemData;
     TreeItem *parentItem;
+	bool is_header_item;
 };
 //! [0]
 
