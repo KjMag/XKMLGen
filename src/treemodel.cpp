@@ -387,7 +387,7 @@ bool TreeModel::writeXMLtoTreeView(QXmlStreamReader & reader)
 	reader.readNext();
 	if (!reader.isStartDocument())
 	{
-		QMessageBox::StandardButton answer = QMessageBox::warning(nullptr, tr("XKMLGen"),
+		QMessageBox::StandardButton answer = QMessageBox::warning(nullptr, tr("XML header missing"),
 			tr("XML header missing. If you are sure that the file contains otherwise well-formed"
 				" XML 1.0 content, you may try to load it anyway.\n"
 				"Are you sure that you want to load this file?"),
@@ -400,7 +400,7 @@ bool TreeModel::writeXMLtoTreeView(QXmlStreamReader & reader)
 	}
 	if (reader.isStartDocument() && reader.documentVersion() != "1.0")
 	{
-		QMessageBox::StandardButton answer = QMessageBox::warning(nullptr, tr("XKMLGen"),
+		QMessageBox::StandardButton answer = QMessageBox::warning(nullptr, tr("Wrong XML version"),
 			tr("This program supports XML ver. 1.0 only. The version of the file you are"
 				" trying to load is different, which means that some content may not be"
 				" parsed correctly. Do you want to proceed?"),

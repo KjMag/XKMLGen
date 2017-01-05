@@ -114,7 +114,7 @@ bool MainWindow::openXML()
 	if (success)
 		updateActions();
 	else
-		QMessageBox::information(this, "XKMLGen", tr("The XML file could not be loaded correctly.\nCheck whether"
+		QMessageBox::information(this, this->windowTitle(), tr("The XML file could not be loaded correctly.\nCheck whether"
 			" the file contains well-formed XML content."));
 
 	return success;
