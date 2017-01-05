@@ -65,7 +65,7 @@
 TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qparent, bool header_item)
 	: QObject(qparent)
 	, is_header_item(header_item)
-	, forbidden_tag_name_characters(R"(^:\-\+\.\,!@#$%&*;~`"'<>\^\(\)\\/\|\?\[\]\{\})")
+	, forbidden_tag_name_characters(R"(^:\-\+\.\,!@#$%&*;~`"'<>\^\(\)\\/\|\?\[\]\{\} )")
 	, tag_name_validator(QRegularExpression("[^0-9" + forbidden_tag_name_characters + "][" + forbidden_tag_name_characters + "]*"))
 {
 	parentItem = parent;
