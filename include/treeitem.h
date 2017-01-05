@@ -56,42 +56,44 @@
 #include <QVector>
 #include <QRegularExpressionValidator>
 
-namespace tln::docutils
+namespace tln
 {
-	//! [0]
-	class TreeItem : public QObject
+	namespace docutils
 	{
-		Q_OBJECT
+		//! [0]
+		class TreeItem : public QObject
+		{
+			Q_OBJECT
 
-	signals :
-		void changeOfNodeValueAttempted(const QVariant&);
+				signals :
+			void changeOfNodeValueAttempted(const QVariant&);
 
-	public:
-		explicit TreeItem(const QVector<QVariant> &data, TreeItem *parent = 0, QObject *qparent = 0, bool header_item = false);
-		~TreeItem();
+		public:
+			explicit TreeItem(const QVector<QVariant> &data, TreeItem *parent = 0, QObject *qparent = 0, bool header_item = false);
+			~TreeItem();
 
-		TreeItem *child(int number);
-		int childCount() const;
-		int columnCount() const;
-		QVariant data(int column) const;
-		bool insertChildren(int position, int count, int columns);
-		bool insertColumns(int position, int columns);
-		TreeItem *parent();
-		bool removeChildren(int position, int count);
-		bool removeColumns(int position, int columns);
-		int childNumber() const;
-		bool setData(int column, const QVariant &value);
+			TreeItem *child(int number);
+			int childCount() const;
+			int columnCount() const;
+			QVariant data(int column) const;
+			bool insertChildren(int position, int count, int columns);
+			bool insertColumns(int position, int columns);
+			TreeItem *parent();
+			bool removeChildren(int position, int count);
+			bool removeColumns(int position, int columns);
+			int childNumber() const;
+			bool setData(int column, const QVariant &value);
 
-	private:
-		const QString forbidden_tag_name_characters;
-		QRegularExpressionValidator tag_name_validator;
-		QList<TreeItem*> childItems;
-		QVector<QVariant> itemData;
-		TreeItem *parentItem;
-		bool is_header_item;
-	};
-	//! [0]
-
-} //namespace Tylin
+		private:
+			const QString forbidden_tag_name_characters;
+			QRegularExpressionValidator tag_name_validator;
+			QList<TreeItem*> childItems;
+			QVector<QVariant> itemData;
+			TreeItem *parentItem;
+			bool is_header_item;
+		};
+		//! [0]
+	} // namespace docutils
+} //namespace tln
 
 #endif // TREEITEM_H

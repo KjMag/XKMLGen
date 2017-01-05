@@ -56,6 +56,7 @@
 #include <QMessageBox>
 
 using namespace tln::xkmlgen;
+using namespace tln::docutils::gui;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

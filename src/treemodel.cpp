@@ -55,10 +55,11 @@
 #include "treemodel.h"
 
 
-using namespace tln::docutils;
+using namespace tln::docutils::gui;
+using tln::docutils::TreeItem;
 
 //! [0]
-gui::TreeModel::TreeModel(const QStringList &headers, const QString &data, QObject *parent)
+TreeModel::TreeModel(const QStringList &headers, const QString &data, QObject *parent)
     : QAbstractItemModel(parent)
 {
     QVector<QVariant> rootData;
@@ -71,12 +72,12 @@ gui::TreeModel::TreeModel(const QStringList &headers, const QString &data, QObje
 //! [0]
 
 //! [1]
-gui::TreeModel::~TreeModel()
+TreeModel::~TreeModel()
 {
     delete rootItem;
 }
 
-void gui::TreeModel::setRootItem(TreeItem * root)
+void TreeModel::setRootItem(TreeItem * root)
 {
 	TreeItem* tmp = rootItem; 
 	emit beginResetModel();
@@ -89,13 +90,13 @@ void gui::TreeModel::setRootItem(TreeItem * root)
 //! [1]
 
 //! [2]
-int gui::TreeModel::columnCount(const QModelIndex & /* parent */) const
+int TreeModel::columnCount(const QModelIndex & /* parent */) const
 {
     return rootItem->columnCount();
 }
 //! [2]
 
-QVariant gui::TreeModel::data(const QModelIndex &index, int role) const
+QVariant TreeModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -109,7 +110,7 @@ QVariant gui::TreeModel::data(const QModelIndex &index, int role) const
 }
 
 //! [3]
-Qt::ItemFlags gui::TreeModel::flags(const QModelIndex &index) const
+Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
@@ -119,7 +120,7 @@ Qt::ItemFlags gui::TreeModel::flags(const QModelIndex &index) const
 //! [3]
 
 //! [4]
-TreeItem* gui::TreeModel::getItem(const QModelIndex &index) const
+TreeItem* TreeModel::getItem(const QModelIndex &index) const
 {
     if (index.isValid()) {
         TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
@@ -130,7 +131,7 @@ TreeItem* gui::TreeModel::getItem(const QModelIndex &index) const
 }
 //! [4]
 
-QVariant gui::TreeModel::headerData(int section, Qt::Orientation orientation,
+QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
                                int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
@@ -140,7 +141,7 @@ QVariant gui::TreeModel::headerData(int section, Qt::Orientation orientation,
 }
 
 //! [5]
-QModelIndex gui::TreeModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (parent.isValid() && parent.column() != 0)
         return QModelIndex();
@@ -157,7 +158,7 @@ QModelIndex gui::TreeModel::index(int row, int column, const QModelIndex &parent
 }
 //! [6]
 
-bool gui::TreeModel::insertColumns(int position, int columns, const QModelIndex &parent)
+bool TreeModel::insertColumns(int position, int columns, const QModelIndex &parent)
 {
     bool success;
 
@@ -168,7 +169,7 @@ bool gui::TreeModel::insertColumns(int position, int columns, const QModelIndex 
     return success;
 }
 
-bool gui::TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
+bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
     TreeItem *parentItem = getItem(parent);
     bool success;
@@ -184,7 +185,7 @@ bool gui::TreeModel::insertRows(int position, int rows, const QModelIndex &paren
 }
 
 //! [7]
-QModelIndex gui::TreeModel::parent(const QModelIndex &index) const
+QModelIndex TreeModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid())
         return QModelIndex();
@@ -199,7 +200,7 @@ QModelIndex gui::TreeModel::parent(const QModelIndex &index) const
 }
 //! [7]
 
-bool gui::TreeModel::removeColumns(int position, int columns, const QModelIndex &parent)
+bool TreeModel::removeColumns(int position, int columns, const QModelIndex &parent)
 {
     bool success;
 
@@ -213,7 +214,7 @@ bool gui::TreeModel::removeColumns(int position, int columns, const QModelIndex 
     return success;
 }
 
-bool gui::TreeModel::removeRows(int position, int rows, const QModelIndex &parent)
+bool TreeModel::removeRows(int position, int rows, const QModelIndex &parent)
 {
     TreeItem *parentItem = getItem(parent);
     bool success = true;
@@ -226,7 +227,7 @@ bool gui::TreeModel::removeRows(int position, int rows, const QModelIndex &paren
 }
 
 //! [8]
-int gui::TreeModel::rowCount(const QModelIndex &parent) const
+int TreeModel::rowCount(const QModelIndex &parent) const
 {
     TreeItem *parentItem = getItem(parent);
 
@@ -234,7 +235,7 @@ int gui::TreeModel::rowCount(const QModelIndex &parent) const
 }
 //! [8]
 
-bool gui::TreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (role != Qt::EditRole)
         return false;
@@ -248,7 +249,7 @@ bool gui::TreeModel::setData(const QModelIndex &index, const QVariant &value, in
     return result;
 }
 
-bool gui::TreeModel::setHeaderData(int section, Qt::Orientation orientation,
+bool TreeModel::setHeaderData(int section, Qt::Orientation orientation,
                               const QVariant &value, int role)
 {
     if (role != Qt::EditRole || orientation != Qt::Horizontal)
@@ -262,7 +263,7 @@ bool gui::TreeModel::setHeaderData(int section, Qt::Orientation orientation,
     return result;
 }
 
-void gui::TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
+void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 {
     QList<TreeItem*> parents;
     QList<int> indentations;
@@ -315,7 +316,7 @@ void gui::TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
     }
 }
 
-void gui::TreeModel::on_ChangeOfNodeValueAttempted(const QVariant &var)
+void TreeModel::on_ChangeOfNodeValueAttempted(const QVariant &var)
 {
 	QMessageBox msgBox;
 	msgBox.setText("The entry: \"" + var.toString() + "\" is a node. Nodes can't be assigned values."
@@ -324,7 +325,7 @@ void gui::TreeModel::on_ChangeOfNodeValueAttempted(const QVariant &var)
 	return;
 }
 
-bool gui::TreeModel::saveTreeViewAsXMLfile(const QString& filepath) const
+bool TreeModel::saveTreeViewAsXMLfile(const QString& filepath) const
 {
 	if (filepath == "")
 		return false;
@@ -342,7 +343,7 @@ bool gui::TreeModel::saveTreeViewAsXMLfile(const QString& filepath) const
 	return !xml_writer.hasError();
 }
 
-bool gui::TreeModel::writeTreeViewAsXML(QXmlStreamWriter& writer) const
+bool TreeModel::writeTreeViewAsXML(QXmlStreamWriter& writer) const
 {
 	writer.writeStartDocument();
 
@@ -358,7 +359,7 @@ bool gui::TreeModel::writeTreeViewAsXML(QXmlStreamWriter& writer) const
 	return true;
 }
 
-bool gui::TreeModel::loadXMLfileAsTreeView(const QString & filepath)
+bool TreeModel::loadXMLfileAsTreeView(const QString & filepath)
 {
 	if (filepath == "")
 		return false;
@@ -370,7 +371,7 @@ bool gui::TreeModel::loadXMLfileAsTreeView(const QString & filepath)
 	return writeXMLtoTreeView(xml_reader);
 }
 
-bool gui::TreeModel::writeXMLtoTreeView(QXmlStreamReader & reader)
+bool TreeModel::writeXMLtoTreeView(QXmlStreamReader & reader)
 {
 	reader.readNext();
 	if (!reader.isStartDocument())
@@ -417,7 +418,7 @@ bool gui::TreeModel::writeXMLtoTreeView(QXmlStreamReader & reader)
 	return success;
 }
 
-bool gui::TreeModel::writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem* const item, int position, const int columns)
+bool TreeModel::writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem* const item, int position, const int columns)
 {
 	while (!reader.atEnd())
 	{
@@ -459,7 +460,7 @@ bool gui::TreeModel::writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem* con
 	return !reader.hasError();
 }
 
-void gui::TreeModel::writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const
+void TreeModel::writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const
 {
 	if (startItem == nullptr)
 		return;

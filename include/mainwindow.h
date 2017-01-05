@@ -56,30 +56,33 @@
 #include <QMainWindow>
 #include <QModelIndex>
 
-namespace tln::xkmlgen
+namespace tln
 {
-
-	class MainWindow : public QMainWindow, private Ui::MainWindow
+	namespace xkmlgen
 	{
-		Q_OBJECT
 
-	public:
-		MainWindow(QWidget *parent = 0);
+		class MainWindow : public QMainWindow, private Ui::MainWindow
+		{
+			Q_OBJECT
 
-	public slots:
-		void updateActions();
+		public:
+			MainWindow(QWidget *parent = 0);
 
-	private slots:
-		bool saveXML();
-		bool openXML();
-		void insertChild();
-		bool insertColumn();
-		void insertRow();
-		bool removeColumn();
-		void removeRow();
-	
-	};
+			public slots:
+			void updateActions();
 
-} // namespace tln::XKMLGen
+			private slots:
+			bool saveXML();
+			bool openXML();
+			void insertChild();
+			bool insertColumn();
+			void insertRow();
+			bool removeColumn();
+			void removeRow();
+
+		};
+
+	} // namespace tln::XKMLGen
+} // namespace tln
 
 #endif // MAINWINDOW_H
