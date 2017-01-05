@@ -56,72 +56,76 @@
 #include <QVariant>
 #include <QXMLStreamWriter>
 
-class TreeItem;
+class tln::docutils::TreeItem;
 
-//! [0]
-class TreeModel : public QAbstractItemModel
+namespace tln::docutils::gui
 {
-    Q_OBJECT
+	//! [0]
+	class TreeModel : public QAbstractItemModel
+	{
+		Q_OBJECT
 
-public:
-    TreeModel(const QStringList &headers, const QString &data = "", QObject *parent = 0);
-    ~TreeModel();
-//! [0] //! [1]
+	public:
+		TreeModel(const QStringList &headers, const QString &data = "", QObject *parent = 0);
+		~TreeModel();
+		//! [0] //! [1]
 
-    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+		QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
+		QVariant headerData(int section, Qt::Orientation orientation,
+			int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
-    QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    QModelIndex parent(const QModelIndex &index) const Q_DECL_OVERRIDE;
+		QModelIndex index(int row, int column,
+			const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+		QModelIndex parent(const QModelIndex &index) const Q_DECL_OVERRIDE;
 
-	void setRootItem(TreeItem* root);
+		void setRootItem(TreeItem* root);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
-//! [1]
+		int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+		int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+		//! [1]
 
-//! [2]
-    Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
-    bool setData(const QModelIndex &index, const QVariant &value,
-                 int role = Qt::EditRole) Q_DECL_OVERRIDE;
-    bool setHeaderData(int section, Qt::Orientation orientation,
-                       const QVariant &value, int role = Qt::EditRole) Q_DECL_OVERRIDE;
+		//! [2]
+		Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
+		bool setData(const QModelIndex &index, const QVariant &value,
+			int role = Qt::EditRole) Q_DECL_OVERRIDE;
+		bool setHeaderData(int section, Qt::Orientation orientation,
+			const QVariant &value, int role = Qt::EditRole) Q_DECL_OVERRIDE;
 
-    bool insertColumns(int position, int columns,
-                       const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
-    bool removeColumns(int position, int columns,
-                       const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
-    bool insertRows(int position, int rows,
-                    const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
-    bool removeRows(int position, int rows,
-                    const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
+		bool insertColumns(int position, int columns,
+			const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
+		bool removeColumns(int position, int columns,
+			const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
+		bool insertRows(int position, int rows,
+			const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
+		bool removeRows(int position, int rows,
+			const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
 
-	// XML I/O utilities
-	bool saveTreeViewAsXMLfile(const QString & filepath) const;
-	bool writeTreeViewAsXML(QXmlStreamWriter & writer) const;
-	bool loadXMLfileAsTreeView(const QString & filepath);
-	bool writeXMLtoTreeView(QXmlStreamReader & reader);
+		// XML I/O utilities
+		bool saveTreeViewAsXMLfile(const QString & filepath) const;
+		bool writeTreeViewAsXML(QXmlStreamWriter & writer) const;
+		bool loadXMLfileAsTreeView(const QString & filepath);
+		bool writeXMLtoTreeView(QXmlStreamReader & reader);
 
-private:
-	// This function is intended to be used together with writeTreeViewAsXML() function as
-	// it is assumed that before this function is called, QXMLStreamWriter::writeStartDocument()
-	// function had already been called, and that the code invoking the function calls
-	// XMLStreamWriter::writeEndDocument() afterwards:
-	void writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const;
-	// This function is intended to be used together with writeXMLtoTreeView() function as
-	// it is assumed that before this function is called, QXmlStreamReader::readNext()
-	// function had already been called once in order to parse the XML header:
-	bool writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem * const item, int position, const int columns);
-    void setupModelData(const QStringList &lines, TreeItem *parent);
-    TreeItem *getItem(const QModelIndex &index) const;
+	private:
+		// This function is intended to be used together with writeTreeViewAsXML() function as
+		// it is assumed that before this function is called, QXMLStreamWriter::writeStartDocument()
+		// function had already been called, and that the code invoking the function calls
+		// XMLStreamWriter::writeEndDocument() afterwards:
+		void writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const;
+		// This function is intended to be used together with writeXMLtoTreeView() function as
+		// it is assumed that before this function is called, QXmlStreamReader::readNext()
+		// function had already been called once in order to parse the XML header:
+		bool writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem * const item, int position, const int columns);
+		void setupModelData(const QStringList &lines, TreeItem *parent);
+		TreeItem *getItem(const QModelIndex &index) const;
 
-    TreeItem *rootItem;
+		TreeItem *rootItem;
 
-public slots:
-	void on_ChangeOfNodeValueAttempted(const QVariant &var);
-};
-//! [2]
+		public slots:
+		void on_ChangeOfNodeValueAttempted(const QVariant &var);
+	};
+	//! [2]
+
+} // namespace tln
 
 #endif // TREEMODEL_H

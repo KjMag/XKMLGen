@@ -55,6 +55,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+using namespace tln::xkmlgen;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {

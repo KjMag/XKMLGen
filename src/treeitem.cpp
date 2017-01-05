@@ -59,7 +59,7 @@
 #include <QStringList>
 #include <QMessageBox>
 
-
+using namespace tln::docutils;
 
 //! [0]
 TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qparent, bool header_item)
