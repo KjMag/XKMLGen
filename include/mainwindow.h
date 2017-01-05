@@ -55,6 +55,7 @@
 
 #include <QMainWindow>
 #include <QModelIndex>
+#include <QContextMenuEvent>
 
 namespace tln
 {
@@ -79,6 +80,9 @@ namespace tln
 			void insertRow();
 			bool removeColumn();
 			void removeRow();
+		
+		protected:
+			virtual void contextMenuEvent(QContextMenuEvent *e) Q_DECL_OVERRIDE;
 
 		};
 

@@ -218,3 +218,12 @@ void MainWindow::updateActions()
             statusBar()->showMessage(tr("Position: (%1,%2) in top level").arg(row).arg(column));
     }
 }
+
+#ifndef QT_NO_CONTEXTMENU
+void MainWindow::contextMenuEvent(QContextMenuEvent* e)
+{
+	editMenu->exec(e->globalPos());
+	
+	return;
+}
+#endif
