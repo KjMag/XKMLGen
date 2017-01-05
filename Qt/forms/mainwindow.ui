@@ -152,7 +152,7 @@
     <string>Removes all entered XML elements</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Q</string>
+    <string>Ctrl+R, A</string>
    </property>
   </action>
  </widget>
