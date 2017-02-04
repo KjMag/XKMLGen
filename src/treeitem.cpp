@@ -62,10 +62,10 @@
 using namespace tln::docutils;
 
 //! [0]
-TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qparent, bool header_item)
+TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qparent, TreeItemType type)
 	: QObject(qparent)
-	, is_header_item(header_item)
-	, forbidden_tag_name_characters(R"(^:\-\+\.\,!@#$%&*;~`"'<>\^\(\)\\/\|\?\[\]\{\} )")
+	, itemType(type)
+	, forbidden_tag_name_characters(R"(^:\-\+\.\,!@#$%&*;~`"'<\^\(\)\\/\|\?\[\]\{\} )")
 	, tag_name_validator(QRegularExpression("[^0-9" + forbidden_tag_name_characters + "][" + forbidden_tag_name_characters + "]*"))
 {
 	parentItem = parent;
@@ -109,6 +109,10 @@ int TreeItem::columnCount() const
 {
     return itemData.count();
 }
+int TreeItem::attributeCount() const
+{
+	return attributeItems.count();
+}
 //! [5]
 
 //! [6]
@@ -121,20 +125,46 @@ QVariant TreeItem::data(int column) const
 //! [7]
 bool TreeItem::insertChildren(int position, int count, int columns)
 {
-    if (position < 0 || position > childItems.size())
+    if (position < 0 || position > childItems.size() || count <= 0 || itemType == TreeItemType::ATTRIBUTE)
         return false;
-	if (childItems.size() == 0 && !is_header_item)
-		this->setData(1, QVariant(""));
+
+	if (childItems.size() == 0 && itemType != TreeItemType::HEADER)
+		this->setData(elementValueColumn, QVariant(""));
 
     for (int row = 0; row < count; ++row) {
         QVector<QVariant> data(columns);
-        TreeItem *item = new TreeItem(data, this);
+        TreeItem *item = new TreeItem(data, this, this);
         childItems.insert(position, item);
     }
 
     return true;
 }
 //! [7]
+
+bool TreeItem::insertAttributes(int position, int count, int columns)
+{
+	if (position < 0 || position > attributeItems.size() || count <= 0 || itemType == TreeItemType::ATTRIBUTE)
+		return false;
+
+	for (int row = 0; row < count; ++row) {
+		QVector<QVariant> data(columns);
+
+		TreeItem *item = nullptr;
+		if (attributeItems.size() != 0)
+		{
+			item = new TreeItem(data, this, this, TreeItemType::ATTRIBUTE);
+		}
+		else
+		{
+			item = new TreeItem(data, nullptr, this, TreeItemType::ATTRIBUTE);
+			this->setData(attributeNameColumn, item->data(attributeNameColumn));
+			this->setData(atrributeValueColumn, item->data(atrributeValueColumn));
+		}
+		attributeItems.insert(position, item);
+	}
+
+	return true;
+}
 
 //! [8]
 bool TreeItem::insertColumns(int position, int columns)
@@ -192,7 +222,6 @@ bool TreeItem::setData(int column, const QVariant &value)
     if (column < 0 || column >= itemData.size())
         return false;
 
-	bool success = true;
 	if (childCount() == 0 || column != 1)
 	{
 		if (column == 0)
@@ -204,7 +233,7 @@ bool TreeItem::setData(int column, const QVariant &value)
 			else
 			{
 				QMessageBox::information(nullptr, "XKMLGen", tr("Incorrect tag name."));
-				success = false;
+				return false;
 			}
 		}
 		else
@@ -215,8 +244,21 @@ bool TreeItem::setData(int column, const QVariant &value)
 	else 
 	{
 		emit changeOfNodeValueAttempted(itemData[0]);
-		success = false;
+		return false;
 	}
-	return success;
+
+	// check if the row represents an attribute:
+	if (data(elementNameColumn) == "==>" && data(elementValueColumn) == "==>")
+	{
+		if (data(attributeNameColumn) == "" || data(attributeNameColumn) == no_data_string
+			|| data(atrributeValueColumn) == "" || data(atrributeValueColumn) == no_data_string)
+		{
+			emit attributeDataIncomplete();
+			return false;
+		}
+		itemType = TreeItemType::ATTRIBUTE;
+	}
+
+	return true;
 }
 //! [11]

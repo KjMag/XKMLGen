@@ -66,7 +66,7 @@ TreeModel::TreeModel(const QStringList &headers, const QString &data, QObject *p
     foreach (QString header, headers)
         rootData << header;
 
-    rootItem = new TreeItem(rootData, nullptr, nullptr, true);
+    rootItem = new TreeItem(rootData, nullptr, nullptr, TreeItem::TreeItemType::HEADER);
     setupModelData(data.split(QString("\n")), rootItem);
 }
 //! [0]
@@ -418,7 +418,7 @@ bool TreeModel::writeXMLtoTreeView(QXmlStreamReader & reader)
 	foreach(QString header, headers)
 		rootData << header;
 
-	TreeItem* root = new TreeItem(rootData, nullptr, nullptr, true);
+	TreeItem* root = new TreeItem(rootData, nullptr, nullptr, TreeItem::TreeItemType::HEADER);
 	int position = 0;
 	bool success = writeXmlToTreeItem(reader, root, position, rootData.size());
 	if (success)

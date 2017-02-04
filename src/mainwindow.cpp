@@ -55,6 +55,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#include <assert.h>
+
 using namespace tln::xkmlgen;
 using namespace tln::docutils::gui;
 
@@ -90,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(removeColumnAction, &QAction::triggered, this, &MainWindow::removeColumn);
     connect(insertChildAction, &QAction::triggered, this, &MainWindow::insertChild);
 	connect(clearAllAction, &QAction::triggered, this, &MainWindow::clearAll);
+	connect(insertAttributeAction, &QAction::triggered, this, &MainWindow::insertAttribute);
 
     updateActions();
 }
@@ -170,10 +173,47 @@ void MainWindow::insertRow()
 
     updateActions();
 
-    for (int column = 0; column < model->columnCount(index.parent()); ++column) {
-        QModelIndex child = model->index(index.row()+1, column, index.parent());
-        model->setData(child, QVariant("No_data"), Qt::EditRole);
-    }
+	populateColumnsWithDefaultValues(model, index);
+
+	return;
+}
+
+void MainWindow::populateColumnsWithDefaultValues(QAbstractItemModel* const model, const QModelIndex index)
+{
+
+	for (int column = 0; column < model->columnCount(index.parent()); ++column) 
+	{
+		QModelIndex child = model->index(index.row() + 1, column, index.parent());
+		model->setData(child, QVariant("No_data"), Qt::EditRole);
+	}
+	return;
+}
+
+void tln::xkmlgen::MainWindow::insertAttribute() // zrobiæ set Attribute w modelu i wywo³ywaæ to tutaj analogicznie do setData()
+{
+	QModelIndex index = view->selectionModel()->currentIndex();
+	QAbstractItemModel *model = view->model();
+
+	if (!model->insertRow(index.row() + 1, index.parent()))
+		return;
+
+	assert(model->columnCount(index.parent()) == 4);
+	// set the first 2 column to indicate that these are attributes
+	for (int column = 0; column < 2; ++column)
+	{
+		QModelIndex child = model->index(index.row() + 1, column, index.parent());
+		model->setData(child, QVariant("==>"), Qt::EditRole);
+	}
+	// set the rest two to "No_data"
+	for (int column = 2; column < 4; ++column)
+	{
+		QModelIndex child = model->index(index.row() + 1, column, index.parent());
+		model->setData(child, QVariant("No_data"), Qt::EditRole);
+	}
+
+	updateActions();
+
+	return;
 }
 
 bool MainWindow::removeColumn()

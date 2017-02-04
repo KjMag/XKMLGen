@@ -65,18 +65,29 @@ namespace tln
 		{
 			Q_OBJECT
 
-				signals :
+		signals:
 			void changeOfNodeValueAttempted(const QVariant&);
+			void attributeDataIncomplete();
 
 		public:
-			explicit TreeItem(const QVector<QVariant> &data, TreeItem *parent = 0, QObject *qparent = 0, bool header_item = false);
+			enum class TreeItemType
+			{
+				HEADER,
+				NODE,
+				ELEMENT,
+				ATTRIBUTE
+			};
+
+			explicit TreeItem(const QVector<QVariant> &data, TreeItem *parent = 0, QObject *qparent = 0, TreeItemType type = TreeItemType::ELEMENT);
 			~TreeItem();
 
 			TreeItem *child(int number);
 			int childCount() const;
 			int columnCount() const;
+			int attributeCount() const;
 			QVariant data(int column) const;
 			bool insertChildren(int position, int count, int columns);
+			//bool insertAttributes(int position, int count, int columns);
 			bool insertColumns(int position, int columns);
 			TreeItem *parent();
 			bool removeChildren(int position, int count);
@@ -86,11 +97,17 @@ namespace tln
 
 		private:
 			const QString forbidden_tag_name_characters;
+			const QString no_data_string = "No_data";
 			QRegularExpressionValidator tag_name_validator;
 			QList<TreeItem*> childItems;
+			QList<TreeItem*> attributeItems;
 			QVector<QVariant> itemData;
 			TreeItem *parentItem;
-			bool is_header_item;
+			TreeItemType itemType;
+			static const int elementNameColumn{0};
+			static const int elementValueColumn{1};
+			static const int attributeNameColumn{2};
+			static const int atrributeValueColumn{3};
 		};
 		//! [0]
 	} // namespace docutils

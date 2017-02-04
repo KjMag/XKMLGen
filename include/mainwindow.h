@@ -69,21 +69,28 @@ namespace tln
 		public:
 			MainWindow(QWidget *parent = 0);
 
-			public slots:
+		public slots:
 			void updateActions();
 
-			private slots:
+		private slots:
 			bool saveXML();
 			bool openXML();
 			void insertChild();
-			bool insertColumn();
+			bool insertColumn(); 
 			void insertRow();
+			void populateColumnsWithDefaultValues(QAbstractItemModel * const model, const QModelIndex index);
+			void insertAttribute();
 			bool removeColumn();
 			void removeRow();
 			void clearAll();
 		
 		protected:
 			virtual void contextMenuEvent(QContextMenuEvent *e) Q_DECL_OVERRIDE;
+
+		private:
+			const QString no_header_string = "No_header";
+			const QString no_data_string = "No_data";
+			const QString attribute_marker = "==>";
 
 		};
 

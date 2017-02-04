@@ -74,6 +74,7 @@
     </property>
     <addaction name="insertRowAction"/>
     <addaction name="insertColumnAction"/>
+    <addaction name="insertAttributeAction"/>
     <addaction name="separator"/>
     <addaction name="removeRowAction"/>
     <addaction name="removeColumnAction"/>
@@ -153,6 +154,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R, A</string>
+   </property>
+  </action>
+  <action name="insertAttributeAction">
+   <property name="text">
+    <string>Add attribute</string>
    </property>
   </action>
  </widget>
