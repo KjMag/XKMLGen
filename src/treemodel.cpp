@@ -79,20 +79,6 @@ TreeModel::~TreeModel()
     delete rootItem;
 }
 
-bool TreeModel::insertAttributes(int position, int rows, const QModelIndex & parent)
-{
-	TreeItem *parentItem = getItem(parent);
-	bool success;
-	if (position >= parentItem->attributeCount())
-		position = parentItem->attributeCount();
-	type_of_item_about_to_be_inserted = TreeItem::TreeItemType::ATTRIBUTE;
-	success = insertRows(position, rows, parent);
-	// restore default value:
-	type_of_item_about_to_be_inserted = TreeItem::TreeItemType::ELEMENT;
-
-	return success;
-}
-
 void TreeModel::setRootItem(TreeItem * root)
 {
 	TreeItem* tmp = rootItem; 
@@ -185,6 +171,32 @@ bool TreeModel::insertColumns(int position, int columns, const QModelIndex &pare
     endInsertColumns();
 
     return success;
+}
+
+bool TreeModel::insertAttributes(int position, int rows, const QModelIndex & parent)
+{
+	TreeItem *parentItem = getItem(parent);
+	bool success;
+	if (position > parentItem->attributeCount())
+		position = parentItem->attributeCount();
+	type_of_item_about_to_be_inserted = TreeItem::TreeItemType::ATTRIBUTE;
+	success = insertRows(position, rows, parent);
+	// restore default value:
+	type_of_item_about_to_be_inserted = TreeItem::TreeItemType::ELEMENT;
+
+	return success;
+}
+
+bool TreeModel::insertElements(int position, int rows, const QModelIndex & parent)
+{
+	TreeItem *parentItem = getItem(parent);
+	bool success;
+	if (position < parentItem->attributeCount())
+		position = parentItem->attributeCount();
+	type_of_item_about_to_be_inserted = TreeItem::TreeItemType::ELEMENT;
+	success = insertRows(position, rows, parent);
+
+	return success;
 }
 
 bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)

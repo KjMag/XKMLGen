@@ -168,12 +168,13 @@ void MainWindow::insertRow()
     QModelIndex index = view->selectionModel()->currentIndex();
     QAbstractItemModel *model = view->model();
 
-    if (!model->insertRow(index.row()+1, index.parent()))
+	TreeModel* tree = static_cast<TreeModel*>(model);
+    if (!tree->insertElements(index.row()+1, 1, index.parent()))
         return;
 
     updateActions();
 
-	populateColumnsWithDefaultValues(model, index);
+	//populateColumnsWithDefaultValues(model, index);
 
 	return;
 }

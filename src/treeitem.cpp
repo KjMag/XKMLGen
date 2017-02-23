@@ -129,7 +129,7 @@ QVariant TreeItem::data(int column) const
 //! [7]
 bool TreeItem::insertChildren(int position, int count, int columns)
 {
-    if (position < 0 || position > childItems.size() || count <= 0 || itemType == TreeItemType::ATTRIBUTE)
+    if (position < 0 || position > (childItems.size() + attributeItems.size()) || count <= 0 || itemType == TreeItemType::ATTRIBUTE)
         return false;
 
 	if (childItems.size() == 0 && itemType != TreeItemType::HEADER)
@@ -138,7 +138,7 @@ bool TreeItem::insertChildren(int position, int count, int columns)
     for (int row = 0; row < count; ++row) {
         QVector<QVariant> data(columns);
         TreeItem *item = new TreeItem(data, this, this);
-        childItems.insert(position, item);
+        childItems.insert(position - attributeCount(), item);
     }
 
     return true;
@@ -249,20 +249,6 @@ bool TreeItem::setData(int column, const QVariant &value)
 	{
 		emit changeOfNodeValueAttempted(itemData[0]);
 		return false;
-	}
-
-	// check if the row represents an attribute:
-	if (data(elementNameColumn) == "==>" && data(elementValueColumn) == "==>")
-	{
-		if (data(attributeNameColumn) == "" || data(attributeNameColumn) == no_data_string
-			|| data(atrributeValueColumn) == "" || data(atrributeValueColumn) == no_data_string)
-		{
-			emit attributeDataIncomplete();
-			return false;
-		}
-		itemType = TreeItemType::ATTRIBUTE;
-		// add item to its parent's attribute list:
-		this->parent()->attributeItems.insert(this->parent()->attributeItems.size(), this);
 	}
 
 	return true;
