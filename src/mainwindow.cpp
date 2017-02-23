@@ -189,27 +189,31 @@ void MainWindow::populateColumnsWithDefaultValues(QAbstractItemModel* const mode
 	return;
 }
 
-void tln::xkmlgen::MainWindow::insertAttribute() // zrobiæ set Attribute w modelu i wywo³ywaæ to tutaj analogicznie do setData()
+void tln::xkmlgen::MainWindow::insertAttribute() // make it part of model instead? (QAbstractItem interface would be broken then)
 {
 	QModelIndex index = view->selectionModel()->currentIndex();
 	QAbstractItemModel *model = view->model();
 
-	if (!model->insertRow(index.row() + 1, index.parent()))
+	TreeModel* tree = static_cast<TreeModel*>(model);
+	if (!tree->insertAttributes(index.row() + 1, 1, index.parent()))
 		return;
 
-	assert(model->columnCount(index.parent()) == 4);
-	// set the first 2 column to indicate that these are attributes
-	for (int column = 0; column < 2; ++column)
-	{
-		QModelIndex child = model->index(index.row() + 1, column, index.parent());
-		model->setData(child, QVariant("==>"), Qt::EditRole);
-	}
-	// set the rest two to "No_data"
-	for (int column = 2; column < 4; ++column)
-	{
-		QModelIndex child = model->index(index.row() + 1, column, index.parent());
-		model->setData(child, QVariant("No_data"), Qt::EditRole);
-	}
+	//if (!model->insertRow(index.row() + 1, index.parent()))
+	//	return;
+
+	//assert(model->columnCount(index.parent()) == 4);
+	//// set the first 2 column to indicate that these are attributes
+	//for (int column = 0; column < 2; ++column)
+	//{
+	//	QModelIndex child = model->index(index.row() + 1, column, index.parent());
+	//	model->setData(child, QVariant("==>"), Qt::EditRole);
+	//}
+	//// set the other two to "No_data"
+	//for (int column = 2; column < 4; ++column)
+	//{
+	//	QModelIndex child = model->index(index.row() + 1, column, index.parent());
+	//	model->setData(child, QVariant("No_data"), Qt::EditRole);
+	//}
 
 	updateActions();
 

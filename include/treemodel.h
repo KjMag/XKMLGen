@@ -99,6 +99,7 @@ namespace tln
 				const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
 			bool insertRows(int position, int rows,
 				const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
+			bool insertAttributes(int position, int rows, const QModelIndex &parent = QModelIndex());
 			bool removeRows(int position, int rows,
 				const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
 
@@ -126,8 +127,8 @@ namespace tln
 			bool writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem * const item, int position, const int columns);
 			void setupModelData(const QStringList &lines, TreeItem *parent);
 			TreeItem *getItem(const QModelIndex &index) const;
-
 			TreeItem *rootItem;
+			TreeItem::TreeItemType type_of_item_about_to_be_inserted{ TreeItem::TreeItemType::ELEMENT };
 		};
 			//! [2]
 		} // namespace gui

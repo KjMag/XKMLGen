@@ -86,14 +86,17 @@ namespace tln
 			int columnCount() const;
 			int attributeCount() const;
 			QVariant data(int column) const;
+			// by "children" child tree items in a view are meant, not children in the XML sense 
+			// (e.g. XML attributes are also child tree items):
 			bool insertChildren(int position, int count, int columns);
-			//bool insertAttributes(int position, int count, int columns);
+			bool insertAttributes(int position, int count, int columns);
 			bool insertColumns(int position, int columns);
 			TreeItem *parent();
 			bool removeChildren(int position, int count);
 			bool removeColumns(int position, int columns);
 			int childNumber() const;
 			bool setData(int column, const QVariant &value);
+			TreeItemType type() const { return itemType; }
 
 		private:
 			const QString forbidden_tag_name_characters;

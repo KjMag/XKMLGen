@@ -54,6 +54,8 @@
 #include "treeitem.h"
 #include "treemodel.h"
 
+#include <assert.h>
+
 
 using namespace tln::docutils::gui;
 using tln::docutils::TreeItem;
@@ -75,6 +77,20 @@ TreeModel::TreeModel(const QStringList &headers, const QString &data, QObject *p
 TreeModel::~TreeModel()
 {
     delete rootItem;
+}
+
+bool TreeModel::insertAttributes(int position, int rows, const QModelIndex & parent)
+{
+	TreeItem *parentItem = getItem(parent);
+	bool success;
+	if (position >= parentItem->attributeCount())
+		position = parentItem->attributeCount();
+	type_of_item_about_to_be_inserted = TreeItem::TreeItemType::ATTRIBUTE;
+	success = insertRows(position, rows, parent);
+	// restore default value:
+	type_of_item_about_to_be_inserted = TreeItem::TreeItemType::ELEMENT;
+
+	return success;
 }
 
 void TreeModel::setRootItem(TreeItem * root)
@@ -151,6 +167,8 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
     TreeItem *parentItem = getItem(parent);
 
     TreeItem *childItem = parentItem->child(row);
+	if (row >= childItem->attributeCount())
+		row -= childItem->attributeCount();
     if (childItem)
         return createIndex(row, column, childItem);
     else
@@ -175,7 +193,15 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
     bool success;
 	int children_pre = parentItem->childCount();
     beginInsertRows(parent, position, position + rows - 1);
-    success = parentItem->insertChildren(position, rows, rootItem->columnCount());
+	switch (type_of_item_about_to_be_inserted)
+	{
+	case TreeItem::TreeItemType::ELEMENT:
+		success = parentItem->insertChildren(position, rows, rootItem->columnCount());
+		break;
+	case TreeItem::TreeItemType::ATTRIBUTE:
+		success = parentItem->insertAttributes(position, rows, rootItem->columnCount());
+		break;
+	}
     endInsertRows();
 
 	if (success && (children_pre == 0))
@@ -231,7 +257,7 @@ int TreeModel::rowCount(const QModelIndex &parent) const
 {
     TreeItem *parentItem = getItem(parent);
 
-    return parentItem->childCount();
+    return parentItem->childCount() + parentItem->attributeCount();
 }
 //! [8]
 

@@ -77,13 +77,17 @@ TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qpa
 TreeItem::~TreeItem()
 {
     qDeleteAll(childItems);
+	qDeleteAll(attributeItems);
 }
 //! [1]
 
 //! [2]
 TreeItem *TreeItem::child(int number)
 {
-    return childItems.value(number);
+	if (number >= attributeCount())
+		return childItems.value(number - attributeCount());
+	else
+		return attributeItems.value(number);
 }
 //! [2]
 
@@ -150,16 +154,16 @@ bool TreeItem::insertAttributes(int position, int count, int columns)
 		QVector<QVariant> data(columns);
 
 		TreeItem *item = nullptr;
-		if (attributeItems.size() != 0)
-		{
+		//if (attributeItems.size() != 0)
+		//{
 			item = new TreeItem(data, this, this, TreeItemType::ATTRIBUTE);
-		}
-		else
-		{
-			item = new TreeItem(data, nullptr, this, TreeItemType::ATTRIBUTE);
-			this->setData(attributeNameColumn, item->data(attributeNameColumn));
-			this->setData(atrributeValueColumn, item->data(atrributeValueColumn));
-		}
+		//}
+		//else
+		//{
+			//item = new TreeItem(data, nullptr, this, TreeItemType::ATTRIBUTE);
+			//this->setData(attributeNameColumn, item->data(attributeNameColumn));
+			//this->setData(atrributeValueColumn, item->data(atrributeValueColumn));
+		//}
 		attributeItems.insert(position, item);
 	}
 
@@ -257,6 +261,8 @@ bool TreeItem::setData(int column, const QVariant &value)
 			return false;
 		}
 		itemType = TreeItemType::ATTRIBUTE;
+		// add item to its parent's attribute list:
+		this->parent()->attributeItems.insert(this->parent()->attributeItems.size(), this);
 	}
 
 	return true;
