@@ -100,6 +100,7 @@ int TreeModel::columnCount(const QModelIndex & /* parent */) const
 
 QVariant TreeModel::data(const QModelIndex &index, int role) const
 {
+	using TreeItemType = TreeItem::TreeItemType;
     if (!index.isValid())
         return QVariant();
 
@@ -107,15 +108,38 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     TreeItem *item = getItem(index);
+	const int col = index.column();
 
-    return item->data(index.column());
+	return item->data(index.column());
+
+	/*switch (role)
+	{
+	case Qt::BackgroundRole:
+		if (item->type() == TreeItemType::ATTRIBUTE)
+		{
+			if (col == TreeItem::elementNameColumn || col == TreeItem::elementValueColumn)
+				return QBrush(QColor::)
+		}
+	}*/
 }
 
 //! [3]
 Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 {
+	using TreeItemType = TreeItem::TreeItemType;
+
     if (!index.isValid())
         return 0;
+
+	TreeItem *item = getItem(index);
+	const int col = index.column();
+	if (item->type() == TreeItemType::ATTRIBUTE)
+	{
+		if (col == TreeItem::elementNameColumn || col == TreeItem::elementValueColumn)
+		{
+			return QAbstractItemModel::flags(index);
+		}
+	}
 
     return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 }

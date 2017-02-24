@@ -98,6 +98,11 @@ namespace tln
 			bool setData(int column, const QVariant &value);
 			TreeItemType type() const { return itemType; }
 
+			static const int elementNameColumn{ 0 };
+			static const int elementValueColumn{ 1 };
+			static const int attributeNameColumn{ 2 };
+			static const int atrributeValueColumn{ 3 };
+
 		private:
 			const QString forbidden_tag_name_characters;
 			const QString no_data_string = "No_data";
@@ -107,10 +112,7 @@ namespace tln
 			QVector<QVariant> itemData;
 			TreeItem *parentItem;
 			TreeItemType itemType;
-			static const int elementNameColumn{0};
-			static const int elementValueColumn{1};
-			static const int attributeNameColumn{2};
-			static const int atrributeValueColumn{3};
+			
 		};
 		//! [0]
 	} // namespace docutils

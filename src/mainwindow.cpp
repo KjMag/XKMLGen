@@ -174,14 +174,13 @@ void MainWindow::insertRow()
 
     updateActions();
 
-	//populateColumnsWithDefaultValues(model, index);
+	populateColumnsWithDefaultValues(model, index);
 
 	return;
 }
 
 void MainWindow::populateColumnsWithDefaultValues(QAbstractItemModel* const model, const QModelIndex index)
 {
-
 	for (int column = 0; column < model->columnCount(index.parent()); ++column) 
 	{
 		QModelIndex child = model->index(index.row() + 1, column, index.parent());
@@ -190,7 +189,7 @@ void MainWindow::populateColumnsWithDefaultValues(QAbstractItemModel* const mode
 	return;
 }
 
-void tln::xkmlgen::MainWindow::insertAttribute() // make it part of model instead? (QAbstractItem interface would be broken then)
+void MainWindow::insertAttribute() // make it part of model instead? (QAbstractItem interface would be broken then)
 {
 	QModelIndex index = view->selectionModel()->currentIndex();
 	QAbstractItemModel *model = view->model();
