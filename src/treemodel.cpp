@@ -184,8 +184,8 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
     TreeItem *parentItem = getItem(parent);
 
     TreeItem *childItem = parentItem->child(row);
-	if (row >= childItem->attributeCount())
-		row -= childItem->attributeCount();
+	//if (row >= childItem->attributeCount())
+	//	row -= childItem->attributeCount();
     if (childItem)
         return createIndex(row, column, childItem);
     else

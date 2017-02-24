@@ -174,7 +174,7 @@ void MainWindow::insertRow()
 
     updateActions();
 
-	populateColumnsWithDefaultValues(model, index);
+	//populateColumnsWithDefaultValues(model, index);
 
 	return;
 }
