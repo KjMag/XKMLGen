@@ -444,7 +444,6 @@ void TreeModel::writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter &
 	if (startItem == nullptr)
 		return;
 
-	const int attributeCount = startItem->attributeCount();
 	const int childCount = startItem->childCount();
 	if (childCount == 0)
 	{
@@ -452,32 +451,33 @@ void TreeModel::writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter &
 			startItem->data(TreeItem::elementNameColumn).toString(),
 			startItem->data(TreeItem::elementValueColumn).toString()
 		);
-		for (int i = 0; i < attributeCount; ++i)
-		{
-			const TreeItem* const attribute = startItem->attribute(i);
-			writer.writeAttribute(
-				attribute->data(TreeItem::attributeNameColumn).toString(),
-				attribute->data(TreeItem::atrributeValueColumn).toString()
-			);
-		}
+		writeElementAttributes(startItem, writer);
 	}
 	else
 	{
 		writer.writeStartElement(startItem->data(0).toString());
-		for (int i = 0; i < attributeCount; ++i)
-		{
-			const TreeItem* const attribute = startItem->attribute(i);
-			writer.writeAttribute(
-				attribute->data(TreeItem::attributeNameColumn).toString(),
-				attribute->data(TreeItem::atrributeValueColumn).toString()
-			);
-		}
+		writeElementAttributes(startItem, writer);
 		for (int i = 0; i < childCount; ++i)
 		{
 			TreeItem* const item = startItem->element(i);
 			writeTreeItemAsXML(item, writer);
 		}
 		writer.writeEndElement();
+	}
+
+	return;
+}
+
+void TreeModel::writeElementAttributes(TreeItem* const item, QXmlStreamWriter & writer) const
+{
+	const int attributeCount = item->attributeCount();
+	for (int i = 0; i < attributeCount; ++i)
+	{
+		const TreeItem* const attribute = item->attribute(i);
+		writer.writeAttribute(
+			attribute->data(TreeItem::attributeNameColumn).toString(),
+			attribute->data(TreeItem::atrributeValueColumn).toString()
+		);
 	}
 
 	return;

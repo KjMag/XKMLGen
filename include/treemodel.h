@@ -122,6 +122,7 @@ namespace tln
 			// function had already been called, and that the code invoking the function calls
 			// XMLStreamWriter::writeEndDocument() afterwards:
 			void writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const;
+			void writeElementAttributes(TreeItem * const item, QXmlStreamWriter & writer) const;
 			// This function is intended to be used together with writeXMLtoTreeView() function as
 			// it is assumed that before this function is called, QXmlStreamReader::readNext()
 			// function had already been called once in order to parse the XML header:
