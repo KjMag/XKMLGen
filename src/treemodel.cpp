@@ -439,6 +439,41 @@ bool TreeModel::writeTreeViewAsXML(QXmlStreamWriter& writer) const
 	return true;
 }
 
+void TreeModel::writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const
+{
+	if (startItem == nullptr)
+		return;
+
+	const int attributeCount = startItem->attributeCount();
+	const int childCount = startItem->childCount();
+	for (int i = 0; i < attributeCount; ++i)
+	{
+		const TreeItem* const attribute = startItem->attribute(i);
+		writer.writeAttribute(
+			QString(""),
+			attribute->data(TreeItem::attributeNameColumn).toString(),
+			attribute->data(TreeItem::atrributeValueColumn).toString()
+		);
+	}
+	if (childCount == 0)
+		writer.writeTextElement(
+			startItem->data(TreeItem::elementNameColumn).toString(), 
+			startItem->data(TreeItem::elementValueColumn).toString()
+		);
+	else
+	{
+		writer.writeStartElement(startItem->data(0).toString());
+		for (int i = 0; i < childCount; ++i)
+		{
+			TreeItem* const item = startItem->child(i);
+			writeTreeItemAsXML(item, writer);
+		}
+		writer.writeEndElement();
+	}
+
+	return;
+}
+
 bool TreeModel::loadXMLfileAsTreeView(const QString & filepath)
 {
 	if (filepath == "")
@@ -547,26 +582,4 @@ bool TreeModel::writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem* const it
 	}
 	function_exit:
 	return !reader.hasError();
-}
-
-void TreeModel::writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter & writer) const
-{
-	if (startItem == nullptr)
-		return;
-
-	int childCount = startItem->childCount();
-	if (childCount == 0)
-		writer.writeTextElement(startItem->data(0).toString(), startItem->data(1).toString());
-	else
-	{
-		writer.writeStartElement(startItem->data(0).toString());
-		for (int i = 0; i < childCount; ++i)
-		{
-			TreeItem* const item = startItem->child(i);
-			writeTreeItemAsXML(item, writer);
-		}
-		writer.writeEndElement();
-	}
-
-	return;
 }

@@ -94,6 +94,12 @@ TreeItem *TreeItem::child(int number)
 	else
 		return attributeItems.value(number);
 }
+TreeItem * TreeItem::attribute(const int number)
+{
+	if (number < 0 || number > attributeItems.size())
+		return nullptr;
+	return attributeItems.value(number);
+}
 //! [2]
 
 //! [3]

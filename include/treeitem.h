@@ -82,6 +82,7 @@ namespace tln
 			~TreeItem();
 
 			TreeItem *child(int number);
+			TreeItem *attribute(const int number);
 			int childCount() const;
 			int columnCount() const;
 			int attributeCount() const;
