@@ -104,23 +104,30 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole && role != Qt::EditRole)
-        return QVariant();
-
     TreeItem *item = getItem(index);
 	const int col = index.column();
 
-	return item->data(index.column());
+	bool uneditable_attribute_column = false;
+	if (item->type() == TreeItemType::ATTRIBUTE)
+		if (col == TreeItem::elementNameColumn || col == TreeItem::elementValueColumn)
+			uneditable_attribute_column = true;
 
-	/*switch (role)
+	switch (role)
 	{
 	case Qt::BackgroundRole:
-		if (item->type() == TreeItemType::ATTRIBUTE)
-		{
-			if (col == TreeItem::elementNameColumn || col == TreeItem::elementValueColumn)
-				return QBrush(QColor::)
-		}
-	}*/
+		if (uneditable_attribute_column)
+			return QBrush(Qt::GlobalColor::gray);
+		break;
+	case Qt::DisplayRole:
+		if (uneditable_attribute_column)
+			return QString("*attribute*");
+	case Qt::EditRole:
+		return item->data(index.column());
+	default:
+		return QVariant();
+	}
+
+	return QVariant();
 }
 
 //! [3]

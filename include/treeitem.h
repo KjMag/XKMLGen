@@ -104,6 +104,7 @@ namespace tln
 			static const int atrributeValueColumn{ 3 };
 
 		private:
+			static const QString attribute_uneditable_column_string;
 			const QString forbidden_tag_name_characters;
 			const QString no_data_string = "No_data";
 			QRegularExpressionValidator tag_name_validator;

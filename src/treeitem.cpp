@@ -62,6 +62,9 @@
 using namespace tln::docutils;
 
 //! [0]
+
+const QString TreeItem::attribute_uneditable_column_string = "*attribute*";
+
 TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qparent, TreeItemType type)
 	: QObject(qparent)
 	, itemType(type)
@@ -70,6 +73,8 @@ TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qpa
 {
 	parentItem = parent;
     itemData = data;
+
+	return;
 }
 //! [0]
 
