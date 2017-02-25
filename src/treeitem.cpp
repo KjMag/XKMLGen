@@ -65,14 +65,14 @@ using namespace tln::docutils;
 
 //! [0]
 
-const QString TreeItem::default_header_attribute_name_string = tr("Attribute name");
-const QString TreeItem::default_header_attribute_value_string = tr("Attribue value");
-const QString TreeItem::default_header_element_name_string = tr("Element/node name");
-const QString TreeItem::default_header_element_value_string = tr("Element value");
-const QString TreeItem::default_element_name_string = tr("Sample_element");
-const QString TreeItem::default_element_value_string = tr("Sample_value");
-const QString TreeItem::attribute_element_name_string = tr("*attribute*");
-const QString TreeItem::attribute_element_value_string = tr("*attribute*");
+const QString TreeItem::default_header_attribute_name_string = "Attribute name";
+const QString TreeItem::default_header_attribute_value_string = "Attribue value";
+const QString TreeItem::default_header_element_name_string = "Element/node name";
+const QString TreeItem::default_header_element_value_string = "Element value";
+const QString TreeItem::default_element_name_string = "Sample_element";
+const QString TreeItem::default_element_value_string = "Sample_value";
+const QString TreeItem::attribute_element_name_string = "*attribute*";
+const QString TreeItem::attribute_element_value_string = "*attribute*";
 
 const QString TreeItem::forbidden_tag_name_characters = R"(^:\-\+\.\,!@#$%&*;~`"'<\^\(\)\\/\|\?\[\]\{\} )";
 

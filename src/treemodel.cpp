@@ -119,8 +119,7 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 			return QBrush(Qt::GlobalColor::gray);
 		break;
 	case Qt::DisplayRole:
-		if (uneditable_attribute_column)
-			return QString("*attribute*");
+		return item->data(index.column());
 	case Qt::EditRole:
 		return item->data(index.column());
 	default:
