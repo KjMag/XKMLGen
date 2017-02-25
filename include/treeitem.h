@@ -103,7 +103,7 @@ namespace tln
 			static const int elementNameColumn{ 0 };
 			static const int elementValueColumn{ 1 };
 			static const int attributeNameColumn{ 2 };
-			static const int atrributeValueColumn{ 3 };
+			static const int attributeValueColumn{ 3 };
 
 		private:
 			static const QString attribute_uneditable_column_string;

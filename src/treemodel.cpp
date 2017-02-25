@@ -148,6 +148,14 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 		}
 	}
 
+	if (item->type() == TreeItemType::ELEMENT)
+	{
+		if (col == TreeItem::attributeNameColumn || col == TreeItem::attributeValueColumn)
+		{
+			return QAbstractItemModel::flags(index);
+		}
+	}
+
     return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 }
 //! [3]
@@ -476,7 +484,7 @@ void TreeModel::writeElementAttributes(TreeItem* const item, QXmlStreamWriter & 
 		const TreeItem* const attribute = item->attribute(i);
 		writer.writeAttribute(
 			attribute->data(TreeItem::attributeNameColumn).toString(),
-			attribute->data(TreeItem::atrributeValueColumn).toString()
+			attribute->data(TreeItem::attributeValueColumn).toString()
 		);
 	}
 
@@ -603,7 +611,7 @@ void TreeModel::loadAttributesToTreeItem(QXmlStreamReader & reader, TreeItem* co
 		QXmlStreamAttribute attr = attributes.at(i);
 		item->insertAttributes(i, 1, columns);
 		item->attribute(i)->setData(TreeItem::attributeNameColumn, QVariant(attr.name().toString()));
-		item->attribute(i)->setData(TreeItem::atrributeValueColumn, QVariant(attr.value().toString()));
+		item->attribute(i)->setData(TreeItem::attributeValueColumn, QVariant(attr.value().toString()));
 	}
 
 	return;

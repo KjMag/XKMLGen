@@ -183,7 +183,7 @@ bool TreeItem::insertAttributes(int position, int count, int columns)
 		//{
 			//item = new TreeItem(data, nullptr, this, TreeItemType::ATTRIBUTE);
 			//this->setData(attributeNameColumn, item->data(attributeNameColumn));
-			//this->setData(atrributeValueColumn, item->data(atrributeValueColumn));
+			//this->setData(attributeValueColumn, item->data(attributeValueColumn));
 		//}
 		attributeItems.insert(position, item);
 	}
