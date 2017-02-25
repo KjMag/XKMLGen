@@ -106,9 +106,21 @@ namespace tln
 			static const int attributeValueColumn{ 3 };
 
 		private:
+			void populateColumnsWithDefaultValues();
+
+			static const QString default_header_element_name_string;
+			static const QString default_header_element_value_string;
+			static const QString default_header_attribute_name_string;
+			static const QString default_header_attribute_value_string;
 			static const QString attribute_uneditable_column_string;
-			const QString forbidden_tag_name_characters;
+			static const QString default_element_name_string;
+			static const QString default_element_value_string;
+			static const QString attribute_element_name_string;
+			static const QString attribute_element_value_string;
+
+			static const QString forbidden_tag_name_characters;
 			const QString no_data_string = "No_data";
+
 			QRegularExpressionValidator tag_name_validator;
 			QList<TreeItem*> childItems;
 			QList<TreeItem*> attributeItems;

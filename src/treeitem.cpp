@@ -59,20 +59,40 @@
 #include <QStringList>
 #include <QMessageBox>
 
+#include <assert.h>
+
 using namespace tln::docutils;
 
 //! [0]
 
-const QString TreeItem::attribute_uneditable_column_string = "*attribute*";
+const QString TreeItem::default_header_attribute_name_string = tr("Attribute name");
+const QString TreeItem::default_header_attribute_value_string = tr("Attribue value");
+const QString TreeItem::default_header_element_name_string = tr("Element/node name");
+const QString TreeItem::default_header_element_value_string = tr("Element value");
+const QString TreeItem::default_element_name_string = tr("Sample_element");
+const QString TreeItem::default_element_value_string = tr("Sample_value");
+const QString TreeItem::attribute_element_name_string = tr("*attribute*");
+const QString TreeItem::attribute_element_value_string = tr("*attribute*");
+
+const QString TreeItem::forbidden_tag_name_characters = R"(^:\-\+\.\,!@#$%&*;~`"'<\^\(\)\\/\|\?\[\]\{\} )";
+const QString TreeItem::attribute_uneditable_column_string = tr("*attribute*");
 
 TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qparent, TreeItemType type)
 	: QObject(qparent)
 	, itemType(type)
-	, forbidden_tag_name_characters(R"(^:\-\+\.\,!@#$%&*;~`"'<\^\(\)\\/\|\?\[\]\{\} )")
 	, tag_name_validator(QRegularExpression("[^0-9" + forbidden_tag_name_characters + "][" + forbidden_tag_name_characters + "]*"))
 {
 	parentItem = parent;
     itemData = data;
+
+	bool data_empty = true;
+	for (int i = 0; i < data.size(); ++i)
+	{
+		if (!data.at(i).toString().isEmpty())
+			data_empty = false;
+	}
+	if(data_empty)
+		populateColumnsWithDefaultValues();
 
 	return;
 }
@@ -153,7 +173,10 @@ bool TreeItem::insertChildren(int position, int count, int columns)
         return false;
 
 	if (childItems.size() == 0 && itemType != TreeItemType::HEADER)
-		this->setData(elementValueColumn, QVariant(""));
+	{
+		bool success = this->setData(elementValueColumn, QVariant(""));
+		this->type = TreeItemType::NODE;
+	}
 
     for (int row = 0; row < count; ++row) {
         QVector<QVariant> data(columns);
@@ -223,6 +246,14 @@ bool TreeItem::removeChildren(int position, int count)
     for (int row = 0; row < count; ++row)
         delete childItems.takeAt(position);
 
+	// if all the children have been removed, the node becomes an element:
+	if (this->childCount() == 0)
+	{
+		assert(this->type() == TreeItemType::NODE || this->type() == TreeItemType::HEADER);
+		if (this->type() != TreeItemType::HEADER)
+			this->type = TreeItemType::ELEMENT;
+	}
+
     return true;
 }
 //! [10]
@@ -266,6 +297,7 @@ bool TreeItem::setData(int column, const QVariant &value)
 			itemData[column] = value;
 		}
 	}
+	// it means that the element is a node and someone tries to edit its value column:
 	else 
 	{
 		emit changeOfNodeValueAttempted(itemData[0]);
@@ -273,5 +305,30 @@ bool TreeItem::setData(int column, const QVariant &value)
 	}
 
 	return true;
+}
+void TreeItem::populateColumnsWithDefaultValues()
+{
+	switch (type())
+	{
+	case TreeItemType::ELEMENT:
+		this->setData(elementNameColumn, default_element_name_string);
+		this->setData(elementValueColumn, default_element_value_string);
+		break;
+	case TreeItemType::ATTRIBUTE:
+		this->setData(elementNameColumn, attribute_element_name_string);
+		this->setData(elementValueColumn, attribute_element_value_string);
+		break;
+	case TreeItemType::NODE:
+		this->setData(elementNameColumn, default_element_name_string);
+		break;
+	case TreeItemType::HEADER:
+		this->setData(elementNameColumn, default_header_element_name_string);
+		this->setData(elementValueColumn, default_header_element_value_string);
+		this->setData(attributeNameColumn, default_header_element_name_string);
+		this->setData(attributeValueColumn, default_header_attribute_value_string);
+		break;
+	}
+
+	return;
 }
 //! [11]
