@@ -127,6 +127,7 @@ namespace tln
 			// it is assumed that before this function is called, QXmlStreamReader::readNext()
 			// function had already been called once in order to parse the XML header:
 			bool writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem * const item, int position, const int columns);
+			void loadAttributesToTreeItem(QXmlStreamReader & reader, TreeItem * const item, const int columns);
 			void setupModelData(const QStringList &lines, TreeItem *parent);
 			TreeItem *getItem(const QModelIndex &index) const;
 			TreeItem *rootItem;

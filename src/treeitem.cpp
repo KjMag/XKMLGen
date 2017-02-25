@@ -158,7 +158,7 @@ bool TreeItem::insertChildren(int position, int count, int columns)
     for (int row = 0; row < count; ++row) {
         QVector<QVariant> data(columns);
         TreeItem *item = new TreeItem(data, this, this);
-        childItems.insert(position - attributeCount(), item);
+        childItems.insert(position, item);
     }
 
     return true;
@@ -170,7 +170,8 @@ bool TreeItem::insertAttributes(int position, int count, int columns)
 	if (position < 0 || position > attributeItems.size() || count <= 0 || itemType == TreeItemType::ATTRIBUTE)
 		return false;
 
-	for (int row = 0; row < count; ++row) {
+	for (int row = 0; row < count; ++row) 
+	{
 		QVector<QVariant> data(columns);
 
 		TreeItem *item = nullptr;

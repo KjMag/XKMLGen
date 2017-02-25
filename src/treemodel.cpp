@@ -239,7 +239,7 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
 	switch (type_of_item_about_to_be_inserted)
 	{
 	case TreeItem::TreeItemType::ELEMENT:
-		success = parentItem->insertChildren(position, rows, rootItem->columnCount());
+		success = parentItem->insertChildren(position - parentItem->attributeCount(), rows, rootItem->columnCount());
 		break;
 	case TreeItem::TreeItemType::ATTRIBUTE:
 		success = parentItem->insertAttributes(position, rows, rootItem->columnCount());
@@ -557,12 +557,14 @@ bool TreeModel::writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem* const it
 	{
 		reader.readNext();
 		QXmlStreamReader::TokenType tokenType = reader.tokenType();
+
 		switch (tokenType)
 		{
 		case QXmlStreamReader::StartElement:
 			item->insertChildren(position, 1, columns);
-			item->child(position)->setData(0, QVariant(reader.name().toString()));
-			if (!writeXmlToTreeItem(reader, item->child(position), 0, columns))
+			item->element(position)->setData(0, QVariant(reader.name().toString()));
+			loadAttributesToTreeItem(reader, item->element(position), columns);
+			if (!writeXmlToTreeItem(reader, item->element(position), 0, columns))
 			{
 				QString error = reader.errorString();
 				return false;
@@ -591,4 +593,18 @@ bool TreeModel::writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem* const it
 	}
 	function_exit:
 	return !reader.hasError();
+}
+
+void TreeModel::loadAttributesToTreeItem(QXmlStreamReader & reader, TreeItem* const item, const int columns)
+{
+	QXmlStreamAttributes attributes = reader.attributes();
+	for (int i = 0; i < attributes.length(); ++i)
+	{
+		QXmlStreamAttribute attr = attributes.at(i);
+		item->insertAttributes(i, 1, columns);
+		item->attribute(i)->setData(TreeItem::attributeNameColumn, QVariant(attr.name().toString()));
+		item->attribute(i)->setData(TreeItem::atrributeValueColumn, QVariant(attr.value().toString()));
+	}
+
+	return;
 }
