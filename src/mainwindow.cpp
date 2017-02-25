@@ -134,13 +134,6 @@ void MainWindow::insertChild()
     if (!model->insertRow(0, index))
         return;
 
-    for (int column = 0; column < model->columnCount(index); ++column) {
-        QModelIndex child = model->index(0, column, index);
-        model->setData(child, QVariant("No_data"), Qt::EditRole);
-        if (!model->headerData(column, Qt::Horizontal).isValid())
-            model->setHeaderData(column, Qt::Horizontal, QVariant("No_header"), Qt::EditRole);
-    }
-
     view->selectionModel()->setCurrentIndex(model->index(0, 0, index),
                                             QItemSelectionModel::ClearAndSelect);
     updateActions();
@@ -172,8 +165,6 @@ void MainWindow::insertRow()
 
     updateActions();
 
-	//populateColumnsWithDefaultValues(model, index);
-
 	return;
 }
 
@@ -187,7 +178,7 @@ void MainWindow::populateColumnsWithDefaultValues(QAbstractItemModel* const mode
 	return;
 }
 
-void MainWindow::insertAttribute() // make it part of model instead? (QAbstractItem interface would be broken then)
+void MainWindow::insertAttribute()
 {
 	QModelIndex index = view->selectionModel()->currentIndex();
 	QAbstractItemModel *model = view->model();
@@ -195,23 +186,6 @@ void MainWindow::insertAttribute() // make it part of model instead? (QAbstractI
 	TreeModel* tree = static_cast<TreeModel*>(model);
 	if (!tree->insertAttributes(index.row() + 1, 1, index.parent()))
 		return;
-
-	//if (!model->insertRow(index.row() + 1, index.parent()))
-	//	return;
-
-	//assert(model->columnCount(index.parent()) == 4);
-	//// set the first 2 column to indicate that these are attributes
-	//for (int column = 0; column < 2; ++column)
-	//{
-	//	QModelIndex child = model->index(index.row() + 1, column, index.parent());
-	//	model->setData(child, QVariant("==>"), Qt::EditRole);
-	//}
-	//// set the other two to "No_data"
-	//for (int column = 2; column < 4; ++column)
-	//{
-	//	QModelIndex child = model->index(index.row() + 1, column, index.parent());
-	//	model->setData(child, QVariant("No_data"), Qt::EditRole);
-	//}
 
 	updateActions();
 
