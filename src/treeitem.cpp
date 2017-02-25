@@ -283,7 +283,7 @@ bool TreeItem::setData(int column, const QVariant &value)
 		{
 			int pos = 0;
 			QValidator::State state = tag_name_validator.validate(value.toString(), pos);
-			if (state == QValidator::Acceptable)
+			if (state == QValidator::Acceptable || this->type() == TreeItemType::ATTRIBUTE || this->type() == TreeItemType::HEADER)
 				itemData[column] = value;
 			else
 			{
