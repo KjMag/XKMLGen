@@ -87,11 +87,6 @@ namespace tln
 		protected:
 			virtual void contextMenuEvent(QContextMenuEvent *e) Q_DECL_OVERRIDE;
 
-		private:
-			const QString no_header_string = "No_header";
-			const QString no_data_string = "No_data";
-			const QString attribute_marker = "==>";
-
 		};
 
 	} // namespace tln::XKMLGen

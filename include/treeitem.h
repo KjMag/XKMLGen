@@ -118,7 +118,6 @@ namespace tln
 			static const QString attribute_element_value_string;
 
 			static const QString forbidden_tag_name_characters;
-			const QString no_data_string = "No_data";
 
 			QRegularExpressionValidator tag_name_validator;
 			QList<TreeItem*> childItems;
