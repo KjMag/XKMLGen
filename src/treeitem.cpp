@@ -174,8 +174,8 @@ bool TreeItem::insertChildren(int position, int count, int columns)
 
 	if (childItems.size() == 0 && itemType != TreeItemType::HEADER)
 	{
-		bool success = this->setData(elementValueColumn, QVariant(""));
-		this->type = TreeItemType::NODE;
+		this->setData(elementValueColumn, QVariant(""));
+		this->itemType = TreeItemType::NODE;
 	}
 
     for (int row = 0; row < count; ++row) {
@@ -251,7 +251,7 @@ bool TreeItem::removeChildren(int position, int count)
 	{
 		assert(this->type() == TreeItemType::NODE || this->type() == TreeItemType::HEADER);
 		if (this->type() != TreeItemType::HEADER)
-			this->type = TreeItemType::ELEMENT;
+			this->itemType = TreeItemType::ELEMENT;
 	}
 
     return true;
