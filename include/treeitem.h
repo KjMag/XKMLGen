@@ -112,7 +112,6 @@ namespace tln
 			static const QString default_header_element_value_string;
 			static const QString default_header_attribute_name_string;
 			static const QString default_header_attribute_value_string;
-			static const QString attribute_uneditable_column_string;
 			static const QString default_element_name_string;
 			static const QString default_element_value_string;
 			static const QString attribute_element_name_string;

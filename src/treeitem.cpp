@@ -75,7 +75,6 @@ const QString TreeItem::attribute_element_name_string = tr("*attribute*");
 const QString TreeItem::attribute_element_value_string = tr("*attribute*");
 
 const QString TreeItem::forbidden_tag_name_characters = R"(^:\-\+\.\,!@#$%&*;~`"'<\^\(\)\\/\|\?\[\]\{\} )";
-const QString TreeItem::attribute_uneditable_column_string = tr("*attribute*");
 
 TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qparent, TreeItemType type)
 	: QObject(qparent)
