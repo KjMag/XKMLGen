@@ -239,11 +239,16 @@ TreeItem *TreeItem::parent()
 //! [10]
 bool TreeItem::removeChildren(int position, int count)
 {
-    if (position < 0 || position + count > childItems.size())
+    if (position < 0 || position + count > (childItems.size() + attributeItems.size()))
         return false;
 
-    for (int row = 0; row < count; ++row)
-        delete childItems.takeAt(position);
+	for (int row = 0; row < count; ++row)
+	{
+		if (position >= this->attributeCount())
+			delete childItems.takeAt(position - this->attributeCount());
+		else
+			delete attributeItems.takeAt(position);
+	}
 
 	// if all the children have been removed, the node becomes an element:
 	if (this->childCount() == 0)
