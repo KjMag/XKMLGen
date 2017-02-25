@@ -73,11 +73,9 @@
      <string>&amp;Edit</string>
     </property>
     <addaction name="insertRowAction"/>
-    <addaction name="insertColumnAction"/>
     <addaction name="insertAttributeAction"/>
     <addaction name="separator"/>
     <addaction name="removeRowAction"/>
-    <addaction name="removeColumnAction"/>
     <addaction name="separator"/>
     <addaction name="insertChildAction"/>
     <addaction name="separator"/>
@@ -97,7 +95,7 @@
   </action>
   <action name="insertRowAction">
    <property name="text">
-    <string>Insert Row</string>
+    <string>Insert element</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+I, R</string>
@@ -105,7 +103,7 @@
   </action>
   <action name="removeRowAction">
    <property name="text">
-    <string>Remove Row</string>
+    <string>Remove element</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R, R</string>

@@ -87,9 +87,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(editMenu, &QMenu::aboutToShow, this, &MainWindow::updateActions);
     connect(insertRowAction, &QAction::triggered, this, &MainWindow::insertRow);
-    connect(insertColumnAction, &QAction::triggered, this, &MainWindow::insertColumn);
     connect(removeRowAction, &QAction::triggered, this, &MainWindow::removeRow);
-    connect(removeColumnAction, &QAction::triggered, this, &MainWindow::removeColumn);
     connect(insertChildAction, &QAction::triggered, this, &MainWindow::insertChild);
 	connect(clearAllAction, &QAction::triggered, this, &MainWindow::clearAll);
 	connect(insertAttributeAction, &QAction::triggered, this, &MainWindow::insertAttribute);
