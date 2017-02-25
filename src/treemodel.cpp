@@ -148,7 +148,7 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 		}
 	}
 
-	if (item->type() == TreeItemType::ELEMENT)
+	if (item->type() == TreeItemType::ELEMENT || item->type() == TreeItemType::NODE)
 	{
 		if (col == TreeItem::attributeNameColumn || col == TreeItem::attributeValueColumn)
 		{
