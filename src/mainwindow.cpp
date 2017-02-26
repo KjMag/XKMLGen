@@ -86,11 +86,11 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(open_XML_action, &QAction::triggered, this, &MainWindow::openXML);
 
     connect(editMenu, &QMenu::aboutToShow, this, &MainWindow::updateActions);
-    connect(insertRowAction, &QAction::triggered, this, &MainWindow::insertRow);
-    connect(removeRowAction, &QAction::triggered, this, &MainWindow::removeRow);
-    connect(insertChildAction, &QAction::triggered, this, &MainWindow::insertChild);
-	connect(clearAllAction, &QAction::triggered, this, &MainWindow::clearAll);
+    connect(insertElementAction, &QAction::triggered, this, &MainWindow::insertElement);
 	connect(insertAttributeAction, &QAction::triggered, this, &MainWindow::insertAttribute);
+	connect(insertChildAction, &QAction::triggered, this, &MainWindow::insertChild);
+    connect(removeRowAction, &QAction::triggered, this, &MainWindow::removeRow);
+	connect(clearAllAction, &QAction::triggered, this, &MainWindow::clearAll);
 
     updateActions();
 }
@@ -154,7 +154,7 @@ bool MainWindow::insertColumn()
     return changed;
 }
 
-void MainWindow::insertRow()
+void MainWindow::insertElement()
 {
     QModelIndex index = view->selectionModel()->currentIndex();
     QAbstractItemModel *model = view->model();
@@ -228,7 +228,7 @@ void MainWindow::updateActions()
     removeColumnAction->setEnabled(hasSelection);
 
     bool hasCurrent = view->selectionModel()->currentIndex().isValid();
-    insertRowAction->setEnabled(hasCurrent);
+    insertElementAction->setEnabled(hasCurrent);
     insertColumnAction->setEnabled(hasCurrent);
 
     if (hasCurrent) {

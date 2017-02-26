@@ -72,12 +72,11 @@
     <property name="title">
      <string>&amp;Edit</string>
     </property>
-    <addaction name="insertRowAction"/>
+    <addaction name="insertElementAction"/>
     <addaction name="insertAttributeAction"/>
+    <addaction name="insertChildAction"/>
     <addaction name="separator"/>
     <addaction name="removeRowAction"/>
-    <addaction name="separator"/>
-    <addaction name="insertChildAction"/>
     <addaction name="separator"/>
     <addaction name="clearAllAction"/>
    </widget>
@@ -93,7 +92,7 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="insertRowAction">
+  <action name="insertElementAction">
    <property name="text">
     <string>Insert element</string>
    </property>
@@ -103,7 +102,7 @@
   </action>
   <action name="removeRowAction">
    <property name="text">
-    <string>Remove element</string>
+    <string>Remove item</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R, R</string>
@@ -127,7 +126,7 @@
   </action>
   <action name="insertChildAction">
    <property name="text">
-    <string>Insert Child</string>
+    <string>Insert child element</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -135,7 +134,7 @@
   </action>
   <action name="save_XML_action">
    <property name="text">
-    <string>Save XML</string>
+    <string>Save as XML</string>
    </property>
   </action>
   <action name="open_XML_action">
@@ -156,7 +155,7 @@
   </action>
   <action name="insertAttributeAction">
    <property name="text">
-    <string>Add attribute</string>
+    <string>Insert attribute</string>
    </property>
   </action>
  </widget>

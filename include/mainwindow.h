@@ -77,7 +77,7 @@ namespace tln
 			bool openXML();
 			void insertChild();
 			bool insertColumn(); 
-			void insertRow();
+			void insertElement();
 			void populateColumnsWithDefaultValues(QAbstractItemModel * const model, const QModelIndex index);
 			void insertAttribute();
 			bool removeColumn();
