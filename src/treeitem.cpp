@@ -140,8 +140,13 @@ int TreeItem::treeItemChildCount() const
 //! [4]
 int TreeItem::treeItemChildNumber() const
 {
-    if (parentItem)
-        return parentItem->childElements.indexOf(const_cast<TreeItem*>(this));
+	if (parentItem)
+	{
+		if (this->type() == TreeItemType::ATTRIBUTE)
+			return parentItem->attributeItems.indexOf(const_cast<TreeItem*>(this));
+		else
+			return parentItem->attributeCount() + parentItem->childElements.indexOf(const_cast<TreeItem*>(this));
+	}
 
     return 0;
 }
