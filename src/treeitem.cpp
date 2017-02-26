@@ -100,26 +100,26 @@ TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem *parent, QObject *qpa
 //! [1]
 TreeItem::~TreeItem()
 {
-    qDeleteAll(childItems);
+    qDeleteAll(childElements);
 	qDeleteAll(attributeItems);
 }
 //! [1]
 
 //! [2]
-TreeItem *TreeItem::child(int number)
+TreeItem *TreeItem::treeItemChild(int number)
 {
 	if (number >= attributeCount())
-		return childItems.value(number - attributeCount());
+		return childElements.value(number - attributeCount());
 	else
 		return attributeItems.value(number);
 }
 
 TreeItem * TreeItem::element(const int number)
 {
-	if (number < 0 || number >= childItems.size())
+	if (number < 0 || number >= childElements.size())
 		return nullptr;
 
-	return childItems.value(number);
+	return childElements.value(number);
 }
 
 TreeItem * TreeItem::attribute(const int number)
@@ -131,17 +131,17 @@ TreeItem * TreeItem::attribute(const int number)
 //! [2]
 
 //! [3]
-int TreeItem::childCount() const
+int TreeItem::treeItemChildCount() const
 {
-    return childItems.count();
+    return childElements.count();
 }
 //! [3]
 
 //! [4]
-int TreeItem::childNumber() const
+int TreeItem::treeItemChildNumber() const
 {
     if (parentItem)
-        return parentItem->childItems.indexOf(const_cast<TreeItem*>(this));
+        return parentItem->childElements.indexOf(const_cast<TreeItem*>(this));
 
     return 0;
 }
@@ -166,12 +166,12 @@ QVariant TreeItem::data(int column) const
 //! [6]
 
 //! [7]
-bool TreeItem::insertChildren(int position, int count, int columns)
+bool TreeItem::insertElements(int position, int count, int columns)
 {
-    if (position < 0 || position > (childItems.size() + attributeItems.size()) || count <= 0 || itemType == TreeItemType::ATTRIBUTE)
+    if (position < 0 || position > (childElements.size() + attributeItems.size()) || count <= 0 || itemType == TreeItemType::ATTRIBUTE)
         return false;
 
-	if (childItems.size() == 0 && itemType != TreeItemType::HEADER)
+	if (childElements.size() == 0 && itemType != TreeItemType::HEADER)
 	{
 		this->setData(elementValueColumn, QVariant(""));
 		this->itemType = TreeItemType::NODE;
@@ -180,7 +180,7 @@ bool TreeItem::insertChildren(int position, int count, int columns)
     for (int row = 0; row < count; ++row) {
         QVector<QVariant> data(columns);
         TreeItem *item = new TreeItem(data, this, this);
-        childItems.insert(position, item);
+        childElements.insert(position, item);
     }
 
     return true;
@@ -222,7 +222,7 @@ bool TreeItem::insertColumns(int position, int columns)
     for (int column = 0; column < columns; ++column)
         itemData.insert(position, QVariant());
 
-    foreach (TreeItem *child, childItems)
+    foreach (TreeItem *child, childElements)
         child->insertColumns(position, columns);
 
     return true;
@@ -237,21 +237,21 @@ TreeItem *TreeItem::parent()
 //! [9]
 
 //! [10]
-bool TreeItem::removeChildren(int position, int count)
+bool TreeItem::removeTreeItemChildren(int position, int count)
 {
-    if (position < 0 || position + count > (childItems.size() + attributeItems.size()))
+    if (position < 0 || position + count > (childElements.size() + attributeItems.size()))
         return false;
 
 	for (int row = 0; row < count; ++row)
 	{
 		if (position >= this->attributeCount())
-			delete childItems.takeAt(position - this->attributeCount());
+			delete childElements.takeAt(position - this->attributeCount());
 		else
 			delete attributeItems.takeAt(position);
 	}
 
 	// if all the children have been removed, the node becomes an element:
-	if (this->childCount() == 0)
+	if (this->treeItemChildCount() == 0)
 	{
 		assert(this->type() == TreeItemType::NODE || this->type() == TreeItemType::HEADER);
 		if (this->type() != TreeItemType::HEADER)
@@ -270,7 +270,7 @@ bool TreeItem::removeColumns(int position, int columns)
     for (int column = 0; column < columns; ++column)
         itemData.remove(position);
 
-    foreach (TreeItem *child, childItems)
+    foreach (TreeItem *child, childElements)
         child->removeColumns(position, columns);
 
     return true;
@@ -282,7 +282,7 @@ bool TreeItem::setData(int column, const QVariant &value)
     if (column < 0 || column >= itemData.size())
         return false;
 
-	if (childCount() == 0 || column != 1)
+	if (treeItemChildCount() == 0 || column != 1)
 	{
 		if (column == 0)
 		{

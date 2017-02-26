@@ -81,22 +81,22 @@ namespace tln
 			explicit TreeItem(const QVector<QVariant> &data, TreeItem *parent = 0, QObject *qparent = 0, TreeItemType type = TreeItemType::ELEMENT);
 			~TreeItem();
 
-			TreeItem *child(int number);
+			TreeItem *treeItemChild(int number); // child in the tree data structure sense, not in XML/JSON sense, i.e. elements and attributes combined
 			TreeItem *element(const int number);
-			TreeItem *attribute(const int number);
-			int childCount() const;
+			TreeItem *attribute(const int number); 
+			int treeItemChildCount() const;
 			int columnCount() const;
 			int attributeCount() const;
 			QVariant data(int column) const;
 			// by "children" child tree items in a view are meant, not children in the XML sense 
 			// (e.g. XML attributes are also child tree items):
-			bool insertChildren(int position, int count, int columns);
-			bool insertAttributes(int position, int count, int columns);
+			bool insertElements(int position, int count, int columns);
+			bool insertAttributes(int position, int count, int columns); 
 			bool insertColumns(int position, int columns);
 			TreeItem *parent();
-			bool removeChildren(int position, int count);
+			bool removeTreeItemChildren(int position, int count);
 			bool removeColumns(int position, int columns);
-			int childNumber() const;
+			int treeItemChildNumber() const;
 			bool setData(int column, const QVariant &value);
 			TreeItemType type() const { return itemType; }
 
@@ -120,9 +120,9 @@ namespace tln
 			static const QString forbidden_tag_name_characters;
 
 			QRegularExpressionValidator tag_name_validator;
-			QList<TreeItem*> childItems;
+			QList<TreeItem*> childElements;
 			QList<TreeItem*> attributeItems;
-			QVector<QVariant> itemData;
+			QVector<QVariant> itemData; 
 			TreeItem *parentItem;
 			TreeItemType itemType;
 			

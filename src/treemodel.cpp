@@ -190,7 +190,7 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
 //! [6]
     TreeItem *parentItem = getItem(parent);
 
-    TreeItem *childItem = parentItem->child(row);
+    TreeItem *childItem = parentItem->treeItemChild(row);
 	//if (row >= childItem->attributeCount())
 	//	row -= childItem->attributeCount();
     if (childItem)
@@ -241,12 +241,12 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
     TreeItem *parentItem = getItem(parent);
     bool success;
-	int children_pre = parentItem->childCount();
+	int children_pre = parentItem->treeItemChildCount();
     beginInsertRows(parent, position, position + rows - 1);
 	switch (type_of_item_about_to_be_inserted)
 	{
 	case TreeItem::TreeItemType::ELEMENT:
-		success = parentItem->insertChildren(position - parentItem->attributeCount(), rows, rootItem->columnCount());
+		success = parentItem->insertElements(position - parentItem->attributeCount(), rows, rootItem->columnCount());
 		break;
 	case TreeItem::TreeItemType::ATTRIBUTE:
 		success = parentItem->insertAttributes(position, rows, rootItem->columnCount());
@@ -296,7 +296,7 @@ bool TreeModel::removeRows(int position, int rows, const QModelIndex &parent)
     bool success = true;
 
     beginRemoveRows(parent, position, position + rows - 1);
-    success = parentItem->removeChildren(position, rows);
+    success = parentItem->removeTreeItemChildren(position, rows);
     endRemoveRows();
 
     return success;
@@ -307,7 +307,7 @@ int TreeModel::rowCount(const QModelIndex &parent) const
 {
     TreeItem *parentItem = getItem(parent);
 
-    return parentItem->childCount() + parentItem->attributeCount();
+    return parentItem->treeItemChildCount() + parentItem->attributeCount();
 }
 //! [8]
 
@@ -369,8 +369,8 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
                 // The last child of the current parent is now the new parent
                 // unless the current parent has no children.
 
-                if (parents.last()->childCount() > 0) {
-                    parents << parents.last()->child(parents.last()->childCount()-1);
+                if (parents.last()->treeItemChildCount() > 0) {
+                    parents << parents.last()->treeItemChild(parents.last()->treeItemChildCount()-1);
 					connect(parents.last(), &TreeItem::changeOfNodeValueAttempted, this, &TreeModel::on_ChangeOfNodeValueAttempted);
                     indentations << position;
                 }
@@ -383,9 +383,9 @@ void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 
             // Append a new item to the current parent's list of children.
             TreeItem *parent = parents.last();
-            parent->insertChildren(parent->childCount(), 1, rootItem->columnCount());
+            parent->insertElements(parent->treeItemChildCount(), 1, rootItem->columnCount());
 			for (int column = 0; column < columnData.size(); ++column)
-				parent->child(parent->childCount() - 1)->setData(column, columnData[column]);
+				parent->treeItemChild(parent->treeItemChildCount() - 1)->setData(column, columnData[column]);
         }
 
         ++number;
@@ -397,7 +397,7 @@ void TreeModel::cutDownTree()
 	if (rootItem == nullptr)
 		return;
 	beginResetModel();
-	rootItem->removeChildren(0, rootItem->childCount());
+	rootItem->removeTreeItemChildren(0, rootItem->treeItemChildCount());
 	endResetModel();
 
 	return;
@@ -434,10 +434,10 @@ bool TreeModel::writeTreeViewAsXML(QXmlStreamWriter& writer) const
 {
 	writer.writeStartDocument();
 
-	int childCount = rootItem->childCount();
+	int childCount = rootItem->treeItemChildCount();
 	for (int i = 0; i < childCount; ++i)
 	{
-		TreeItem* item = rootItem->child(i);
+		TreeItem* item = rootItem->treeItemChild(i);
 		writeTreeItemAsXML(item, writer);
 	}
 
@@ -451,7 +451,7 @@ void TreeModel::writeTreeItemAsXML(TreeItem* const startItem, QXmlStreamWriter &
 	if (startItem == nullptr)
 		return;
 
-	const int childCount = startItem->childCount();
+	const int childCount = startItem->treeItemChildCount();
 	if (childCount == 0)
 	{
 		writer.writeTextElement(
@@ -568,7 +568,7 @@ bool TreeModel::writeXmlToTreeItem(QXmlStreamReader & reader, TreeItem* const it
 		switch (tokenType)
 		{
 		case QXmlStreamReader::StartElement:
-			item->insertChildren(position, 1, columns);
+			item->insertElements(position, 1, columns);
 			item->element(position)->setData(0, QVariant(reader.name().toString()));
 			loadAttributesToTreeItem(reader, item->element(position), columns);
 			if (!writeXmlToTreeItem(reader, item->element(position), 0, columns))
