@@ -86,6 +86,7 @@ namespace tln
 			TreeItem *attribute(const int number); 
 			int treeItemChildCount() const;
 			int columnCount() const;
+			int elementCount() const;
 			int attributeCount() const;
 			QVariant data(int column) const;
 			// by "children" child tree items in a view are meant, not children in the XML sense 

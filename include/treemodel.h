@@ -64,7 +64,6 @@ namespace tln
 	{
 		namespace gui
 		{
-		//! [0]
 		class TreeModel : public QAbstractItemModel
 		{
 			Q_OBJECT
@@ -72,7 +71,6 @@ namespace tln
 		public:
 			TreeModel(const QStringList &headers, const QString &data = "", QObject *parent = 0);
 			~TreeModel();
-			//! [0] //! [1]
 
 			QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
 			QVariant headerData(int section, Qt::Orientation orientation,
@@ -80,13 +78,12 @@ namespace tln
 
 			QModelIndex index(int row, int column,
 				const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+			QModelIndexList indices(); // returns indices of all elements contained in the model
 			QModelIndex parent(const QModelIndex &index) const Q_DECL_OVERRIDE;
 
 			int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 			int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
-			//! [1]
-
-			//! [2]
+			
 			Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
 			bool setData(const QModelIndex &index, const QVariant &value,
 				int role = Qt::EditRole) Q_DECL_OVERRIDE;
@@ -131,6 +128,7 @@ namespace tln
 			void setupModelData(const QStringList &lines, TreeItem *parent);
 			TreeItem *getItem(const QModelIndex &index) const;
 			TreeItem *rootItem;
+			QModelIndexList getItemIndices(TreeItem* item);
 			TreeItem::TreeItemType type_of_item_about_to_be_inserted{ TreeItem::TreeItemType::ELEMENT };
 		};
 			//! [2]

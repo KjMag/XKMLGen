@@ -157,6 +157,10 @@ int TreeItem::columnCount() const
 {
     return itemData.count();
 }
+int TreeItem::elementCount() const
+{
+	return childElements.count();
+}
 int TreeItem::attributeCount() const
 {
 	return attributeItems.count();

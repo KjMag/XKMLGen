@@ -79,6 +79,11 @@ TreeModel::~TreeModel()
     delete rootItem;
 }
 
+QModelIndexList TreeModel::indices()
+{
+	return getItemIndices(rootItem);
+}
+
 void TreeModel::setRootItem(TreeItem * root)
 {
 	TreeItem* tmp = rootItem; 
@@ -159,7 +164,6 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 }
 //! [3]
 
-//! [4]
 TreeItem* TreeModel::getItem(const QModelIndex &index) const
 {
     if (index.isValid()) {
@@ -169,7 +173,30 @@ TreeItem* TreeModel::getItem(const QModelIndex &index) const
     }
     return rootItem;
 }
-//! [4]
+
+QModelIndexList TreeModel::getItemIndices(TreeItem * item)
+{
+	if (item == nullptr)
+		return QModelIndexList();
+	
+	QModelIndexList indices;
+	indices.push_back(this->createIndex(item->treeItemChildNumber(), TreeItem::elementNameColumn, item));
+
+	// get attributes' indices
+	for (int i = 0; i < item->attributeCount(); ++i)
+	{
+		indices.push_back(this->createIndex(i, TreeItem::elementNameColumn, item));
+	}
+
+	// get children's elements and attributes indices
+	for (int i = 0; i < item->elementCount(); ++i)
+	{
+		QModelIndexList child_indices = getItemIndices(item->element(i));
+		indices.append(child_indices);
+	}
+
+	return indices;
+}
 
 QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
                                int role) const
@@ -185,20 +212,16 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
 {
     if (parent.isValid() && parent.column() != 0)
         return QModelIndex();
-//! [5]
 
-//! [6]
     TreeItem *parentItem = getItem(parent);
 
     TreeItem *childItem = parentItem->treeItemChild(row);
-	//if (row >= childItem->attributeCount())
-	//	row -= childItem->attributeCount();
+
     if (childItem)
         return createIndex(row, column, childItem);
     else
         return QModelIndex();
 }
-//! [6]
 
 bool TreeModel::insertColumns(int position, int columns, const QModelIndex &parent)
 {

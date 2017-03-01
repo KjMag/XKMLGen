@@ -83,9 +83,10 @@ namespace tln
 			bool removeColumn();
 			void removeRow();
 			void clearAll();
-		
+				
 		protected:
 			virtual void contextMenuEvent(QContextMenuEvent *e) Q_DECL_OVERRIDE;
+			virtual void updateColumnsSize();
 
 		};
 

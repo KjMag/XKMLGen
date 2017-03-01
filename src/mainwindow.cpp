@@ -93,6 +93,9 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(clearAllAction, &QAction::triggered, this, &MainWindow::clearAll);
 
     updateActions();
+	updateColumnsSize();
+
+	return;
 }
 
 bool MainWindow::saveXML()
@@ -137,6 +140,9 @@ void MainWindow::insertChild()
     view->selectionModel()->setCurrentIndex(model->index(0, 0, index),
                                             QItemSelectionModel::ClearAndSelect);
     updateActions();
+	updateColumnsSize();
+
+	return;
 }
 
 bool MainWindow::insertColumn()
@@ -150,6 +156,7 @@ bool MainWindow::insertColumn()
         model->setHeaderData(column + 1, Qt::Horizontal, QVariant("No_header"), Qt::EditRole);
 
     updateActions();
+	updateColumnsSize();
 
     return changed;
 }
@@ -164,6 +171,7 @@ void MainWindow::insertElement()
         return;
 
     updateActions();
+	updateColumnsSize();
 
 	return;
 }
@@ -188,6 +196,7 @@ void MainWindow::insertAttribute()
 		return;
 
 	updateActions();
+	updateColumnsSize();
 
 	return;
 }
@@ -202,6 +211,7 @@ bool MainWindow::removeColumn()
 
     if (changed)
         updateActions();
+	updateColumnsSize();
 
     return changed;
 }
@@ -212,12 +222,41 @@ void MainWindow::removeRow()
     QAbstractItemModel *model = view->model();
     if (model->removeRow(index.row(), index.parent()))
         updateActions();
+	updateColumnsSize();
+	
+	return;
 }
 
 void MainWindow::clearAll()
 {
 	TreeModel* mod = static_cast<TreeModel*>(this->view->model());
 	mod->cutDownTree();
+	return;
+}
+
+void MainWindow::updateColumnsSize()
+{
+	QModelIndexList indices = static_cast<TreeModel*>(view->model())->indices();
+	QVector<bool> expanded(indices.size());
+
+	// remember which items were originally expanded
+	for (int i = 0; i < indices.size(); ++i)
+	{
+		expanded[i] = view->isExpanded(indices[i]) ? true : false;
+	}
+
+	view->expandAll();
+	for (int i = 0; i < view->model()->rowCount(); ++i)
+	{
+		view->resizeColumnToContents(i);
+	}
+
+	// restore all the items to their original expanded/collapsed state
+	for (int i = 0; i < indices.size(); ++i)
+	{
+		view->setExpanded(indices[i], expanded[i]);
+	}
+
 	return;
 }
 
