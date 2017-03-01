@@ -73,6 +73,8 @@ const QString TreeItem::default_element_name_string = "Sample_element";
 const QString TreeItem::default_element_value_string = "Sample_value";
 const QString TreeItem::attribute_element_name_string = "*attribute*";
 const QString TreeItem::attribute_element_value_string = "*attribute*";
+const QString TreeItem::default_attribute_name_string = "Sample_attribute_name";
+const QString TreeItem::default_attribute_value_string = "Sample_attribute_value";
 
 const QString TreeItem::forbidden_tag_name_characters = R"(^:\-\+\.\,!@#$%&*;~`"'<\^\(\)\\/\|\?\[\]\{\} )";
 
@@ -330,11 +332,14 @@ void TreeItem::populateColumnsWithDefaultValues()
 	case TreeItemType::ATTRIBUTE:
 		this->setData(elementNameColumn, attribute_element_name_string);
 		this->setData(elementValueColumn, attribute_element_value_string);
+		this->setData(attributeNameColumn, default_attribute_name_string);
+		this->setData(attributeValueColumn, default_attribute_value_string);
 		break;
 	case TreeItemType::NODE:
 		this->setData(elementNameColumn, default_element_name_string);
 		break;
 	case TreeItemType::HEADER:
+		this->insertColumns(0, 4);
 		this->setData(elementNameColumn, default_header_element_name_string);
 		this->setData(elementValueColumn, default_header_element_value_string);
 		this->setData(attributeNameColumn, default_header_element_name_string);

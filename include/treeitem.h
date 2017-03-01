@@ -117,6 +117,8 @@ namespace tln
 			static const QString default_element_value_string;
 			static const QString attribute_element_name_string;
 			static const QString attribute_element_value_string;
+			static const QString default_attribute_name_string;
+			static const QString default_attribute_value_string;
 
 			static const QString forbidden_tag_name_characters;
 

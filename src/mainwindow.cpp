@@ -65,12 +65,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     setupUi(this);
 
-    QStringList headers;
-    headers << tr("Element/Node name") << tr("Element value") << tr("Attribute name") << tr("Attribute value");
-
     QFile file(":/default.txt");
     file.open(QIODevice::ReadOnly);
-    TreeModel *model = new TreeModel(headers, file.readAll());
+    TreeModel *model = new TreeModel(QStringList(), file.readAll());
     file.close();
 
     view->setModel(model);
@@ -247,7 +244,7 @@ void MainWindow::updateColumnsSize()
 	}
 
 	view->expandAll();
-	for (int i = 0; i < view->model()->rowCount(); ++i)
+	for (int i = 0; i < view->model()->columnCount(); ++i)
 	{
 		view->resizeColumnToContents(i);
 	}
