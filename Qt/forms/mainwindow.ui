@@ -97,7 +97,7 @@
     <string>Insert element</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+I, R</string>
+    <string>Ctrl+I, E</string>
    </property>
   </action>
   <action name="removeRowAction">
@@ -156,6 +156,9 @@
   <action name="insertAttributeAction">
    <property name="text">
     <string>Insert attribute</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I, A</string>
    </property>
   </action>
  </widget>
