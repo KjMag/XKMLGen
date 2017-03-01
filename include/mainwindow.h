@@ -78,15 +78,15 @@ namespace tln
 			void insertChild();
 			bool insertColumn(); 
 			void insertElement();
-			void populateColumnsWithDefaultValues(QAbstractItemModel * const model, const QModelIndex index);
 			void insertAttribute();
 			bool removeColumn();
 			void removeRow();
 			void clearAll();
+			void updateColumnsSize();
 				
 		protected:
 			virtual void contextMenuEvent(QContextMenuEvent *e) Q_DECL_OVERRIDE;
-			virtual void updateColumnsSize();
+			virtual void populateColumnsWithDefaultValues(QAbstractItemModel * const model, const QModelIndex index);
 
 		};
 

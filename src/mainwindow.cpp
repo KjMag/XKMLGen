@@ -91,6 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(insertChildAction, &QAction::triggered, this, &MainWindow::insertChild);
     connect(removeRowAction, &QAction::triggered, this, &MainWindow::removeRow);
 	connect(clearAllAction, &QAction::triggered, this, &MainWindow::clearAll);
+	connect(view->model(), &QAbstractItemModel::dataChanged, this, &MainWindow::updateColumnsSize);
 
     updateActions();
 	updateColumnsSize();
