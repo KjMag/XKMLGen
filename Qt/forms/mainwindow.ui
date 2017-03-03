@@ -31,7 +31,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QTreeView" name="view">
+     <widget class="XkmlTreeView" name="view">
       <property name="alternatingRowColors">
        <bool>true</bool>
       </property>
@@ -162,6 +162,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>XkmlTreeView</class>
+   <extends>QTreeView</extends>
+   <header>XkmlTreeView.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../resources/xkmlgen.qrc"/>
  </resources>

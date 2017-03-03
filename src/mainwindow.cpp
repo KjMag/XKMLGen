@@ -50,6 +50,8 @@
 
 #include "mainwindow.h"
 #include "treemodel.h"
+#include <XkmlTreeView.h>
+#include <qtreeview>
 
 #include <QFile>
 #include <QFileDialog>

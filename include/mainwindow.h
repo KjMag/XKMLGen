@@ -56,6 +56,7 @@
 #include <QMainWindow>
 #include <QModelIndex>
 #include <QContextMenuEvent>
+#include <XkmlTreeView.h>
 
 namespace tln
 {
