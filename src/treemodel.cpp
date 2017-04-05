@@ -134,7 +134,6 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 	return QVariant();
 }
 
-//! [3]
 Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 {
 	using TreeItemType = TreeItem::TreeItemType;
@@ -144,25 +143,35 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 
 	TreeItem *item = getItem(index);
 	const int col = index.column();
+	Qt::ItemFlags returned_flags = QAbstractItemModel::flags(index);
 	if (item->type() == TreeItemType::ATTRIBUTE)
 	{
-		if (col == TreeItem::elementNameColumn || col == TreeItem::elementValueColumn)
+		if (col != TreeItem::elementNameColumn && col != TreeItem::elementValueColumn)
 		{
-			return QAbstractItemModel::flags(index);
+			returned_flags |= Qt::ItemIsEditable;
 		}
+
+		returned_flags |= Qt::ItemIsDragEnabled;
 	}
 
 	if (item->type() == TreeItemType::ELEMENT || item->type() == TreeItemType::NODE)
 	{
-		if (col == TreeItem::attributeNameColumn || col == TreeItem::attributeValueColumn)
+		if (col != TreeItem::attributeNameColumn && col != TreeItem::attributeValueColumn)
 		{
-			return QAbstractItemModel::flags(index);
+			returned_flags |= Qt::ItemIsEditable;
 		}
+
+		returned_flags |= Qt::ItemIsDragEnabled;
+		returned_flags |= Qt::ItemIsDropEnabled;
 	}
 
-    return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
+	return returned_flags;
 }
-//! [3]
+
+Qt::DropActions TreeModel::supportedDropActions() const
+{
+	return Qt::MoveAction;
+}
 
 TreeItem* TreeModel::getItem(const QModelIndex &index) const
 {

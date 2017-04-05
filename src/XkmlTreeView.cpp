@@ -1,6 +1,9 @@
 #include "XkmlTreeView.h"
+#include "treeitem.h"
+#include "treemodel.h"
+#include <QDropEvent>
 
-using namespace tln::docutils::gui;
+//using namespace tln::docutils::gui;
 
 XkmlTreeView::XkmlTreeView(QWidget *parent) :
 	QTreeView(parent)
@@ -33,15 +36,23 @@ void XkmlTreeView::dropEvent(QDropEvent* event)
 		dropOK = true;
 		break;
 	case QAbstractItemView::OnItem:
-		dropOK = false;
+		dropOK = true;
 		break;
 	case QAbstractItemView::OnViewport:
-		dropOK = false;
+		dropOK = true;
 		break;
 	}
 	if (dropOK)
 	{
-		
+		using namespace tln::docutils::gui;
+		using namespace tln::docutils;
+		QModelIndex index = indexAt(event->pos());
+		if (!index.isValid())
+			return;
+		QAbstractItemModel *model = this->model();
+		TreeModel* tree = static_cast<TreeModel*>(model);
+		TreeItem* item = new TreeItem()
+		tree->insertElements(index.row() + 1, 1, index.parent());
 	}
 	setDropIndicatorShown(false); 
 	return;

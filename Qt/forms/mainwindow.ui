@@ -166,7 +166,7 @@
   <customwidget>
    <class>XkmlTreeView</class>
    <extends>QTreeView</extends>
-   <header>XkmlTreeView.h</header>
+   <header location="global">XkmlTreeView.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -73,6 +73,10 @@ MainWindow::MainWindow(QWidget *parent)
     file.close();
 
     view->setModel(model);
+	view->setDragEnabled(true);
+	view->setAcceptDrops(true);
+	view->setDropIndicatorShown(true);
+	view->setDragDropMode(QAbstractItemView::InternalMove);
     for (int column = 0; column < model->columnCount(); ++column)
         view->resizeColumnToContents(column);
 

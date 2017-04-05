@@ -85,6 +85,7 @@ namespace tln
 			int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 			
 			Qt::ItemFlags flags(const QModelIndex &index) const Q_DECL_OVERRIDE;
+			Qt::DropActions supportedDropActions() const Q_DECL_OVERRIDE;
 			bool setData(const QModelIndex &index, const QVariant &value,
 				int role = Qt::EditRole) Q_DECL_OVERRIDE;
 			bool setHeaderData(int section, Qt::Orientation orientation,

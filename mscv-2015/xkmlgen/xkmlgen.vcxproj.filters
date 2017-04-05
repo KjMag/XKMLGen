@@ -16,12 +16,14 @@
     <ClCompile Include="GeneratedFiles\Release\moc_treeitem.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\XkmlTreeView.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_XkmlTreeView.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_XkmlTreeView.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\XkmlTreeView.cpp">
+      <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -33,7 +35,9 @@
     <CustomBuild Include="..\..\Qt\resources\xkmlgen.qrc" />
     <CustomBuild Include="..\..\Qt\forms\mainwindow.ui" />
     <CustomBuild Include="..\..\include\treeitem.h" />
-    <CustomBuild Include="..\..\include\XkmlTreeView.h" />
+    <CustomBuild Include="..\..\include\XkmlTreeView.h">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Qt\resources\default.txt" />
