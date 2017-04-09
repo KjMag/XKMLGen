@@ -97,6 +97,8 @@ namespace tln
 				const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
 			bool insertRows(int position, int rows,
 				const QModelIndex &parent = QModelIndex()) Q_DECL_OVERRIDE;
+			bool moveRows(const QModelIndex &sourceParent, int sourceRow, int count,
+				const QModelIndex &destinationParent, int destinationChild) Q_DECL_OVERRIDE;
 			bool insertAttributes(int position, int rows, const QModelIndex &parent = QModelIndex());
 			bool insertElements(int position, int rows, const QModelIndex & parent);
 			bool removeRows(int position, int rows,

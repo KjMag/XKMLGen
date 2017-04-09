@@ -238,6 +238,39 @@ bool TreeItem::insertColumns(int position, int columns)
 
     return true;
 }
+bool TreeItem::insertExistingTreeItem(TreeItem * item, const int position)
+{
+	if (item == nullptr || position < 0 || position > this->treeItemChildCount())
+		return false;
+
+	switch (item->type())
+	{
+	case TreeItemType::HEADER:
+		return false;
+	case TreeItemType::ATTRIBUTE:
+		if (position > this->attributeCount())
+			return false;
+		else
+			this->attributeItems.insert(position, item);
+		break;
+	case TreeItemType::ELEMENT:
+		if (position < this->attributeCount())
+			return false;
+		else
+			this->childElements.insert(position - this->attributeCount(), item);
+		break;
+	case TreeItemType::NODE:
+		if (position < this->attributeCount())
+			return false;
+		else
+			this->childElements.insert(position - this->attributeCount(), item);
+		break;
+	}
+
+	item->parentItem = this;
+
+	return true;
+}
 //! [8]
 
 //! [9]
@@ -250,7 +283,7 @@ TreeItem *TreeItem::parent()
 //! [10]
 bool TreeItem::removeTreeItemChildren(int position, int count)
 {
-    if (position < 0 || position + count > (childElements.size() + attributeItems.size()))
+    if (position < 0 || position + count > this->treeItemChildCount())
         return false;
 
 	for (int row = 0; row < count; ++row)
@@ -270,6 +303,39 @@ bool TreeItem::removeTreeItemChildren(int position, int count)
 	}
 
     return true;
+}
+bool TreeItem::disconnectTreeItemChildren(const int position, const int count)
+{
+	if (position < 0 || count <= 0)
+		return false;
+	if (position + count > this->treeItemChildCount())
+		return false;
+
+	for (int row = 0; row < count; ++row)
+	{
+		TreeItem *item = nullptr;
+		if (position >= this->attributeCount())
+		{
+			item = childElements.at(position - this->attributeCount());
+			childElements.removeAt(position - this->attributeCount());
+		}
+		else
+		{
+			item = attributeItems.at(position);
+			attributeItems.removeAt(position);
+		}
+		item->parentItem = nullptr;
+	}
+
+	// if all the children have been removed, the node becomes an element:
+	if (this->treeItemChildCount() == 0)
+	{
+		assert(this->type() == TreeItemType::NODE || this->type() == TreeItemType::HEADER);
+		if (this->type() != TreeItemType::HEADER)
+			this->itemType = TreeItemType::ELEMENT;
+	}
+
+	return true;
 }
 //! [10]
 

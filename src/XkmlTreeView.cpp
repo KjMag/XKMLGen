@@ -2,8 +2,10 @@
 #include "treeitem.h"
 #include "treemodel.h"
 #include <QDropEvent>
+#include <qmimedata.h>
 
 //using namespace tln::docutils::gui;
+//using namespace Qt;
 
 XkmlTreeView::XkmlTreeView(QWidget *parent) :
 	QTreeView(parent)
@@ -51,8 +53,9 @@ void XkmlTreeView::dropEvent(QDropEvent* event)
 			return;
 		QAbstractItemModel *model = this->model();
 		TreeModel* tree = static_cast<TreeModel*>(model);
-		TreeItem* item = new TreeItem()
-		tree->insertElements(index.row() + 1, 1, index.parent());
+		//tree->moveRows(, , 1, index, event->pos());
+		const QMimeData *mime = event->mimeData();
+		QString text = mime->text();
 	}
 	setDropIndicatorShown(false); 
 	return;

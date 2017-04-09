@@ -243,6 +243,28 @@ bool TreeModel::insertColumns(int position, int columns, const QModelIndex &pare
     return success;
 }
 
+bool TreeModel::moveRows(const QModelIndex & sourceParent, int sourceRow, int count, const QModelIndex & destinationParent, int destinationChild)
+{
+	using TreeItemType = TreeItem::TreeItemType;
+
+	bool success = false;
+
+	TreeItem *sourceParentItem = getItem(sourceParent);
+	TreeItem *movedItem = sourceParentItem->treeItemChild(sourceRow);
+	TreeItem *destinationParentItem = getItem(destinationParent);
+
+	if (sourceParentItem == nullptr || destinationParentItem == nullptr || movedItem == nullptr)
+		return success;
+	assert(movedItem->type() != TreeItemType::HEADER); // because by definition parent of the header is nullptr
+
+	beginMoveRows(sourceParent, sourceRow, sourceRow + count - 1, destinationParent, destinationChild);
+	sourceParentItem->disconnectTreeItemChildren(sourceRow, count);
+	success = destinationParentItem->insertExistingTreeItem(movedItem, destinationChild);
+	endMoveRows();
+
+	return success;
+}
+
 bool TreeModel::insertAttributes(int position, int rows, const QModelIndex & parent)
 {
 	TreeItem *parentItem = getItem(parent);

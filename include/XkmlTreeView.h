@@ -1,8 +1,8 @@
 #pragma once
 #include <qtreeview.h>
 
-namespace Qt
-{
+//namespace Qt
+//{
 	class XkmlTreeView :
 		public QTreeView
 	{
@@ -15,5 +15,5 @@ namespace Qt
 		virtual void dropEvent(QDropEvent* event) Q_DECL_OVERRIDE;
 	};
 
-}
+//}
 

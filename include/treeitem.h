@@ -94,8 +94,10 @@ namespace tln
 			bool insertElements(int position, int count, int columns);
 			bool insertAttributes(int position, int count, int columns); 
 			bool insertColumns(int position, int columns);
+			bool insertExistingTreeItem(TreeItem* item, const int position); // takes ownership of the argument passed unless it's nullptr
 			TreeItem *parent();
 			bool removeTreeItemChildren(int position, int count);
+			bool disconnectTreeItemChildren(const int position, const int count);
 			bool removeColumns(int position, int columns);
 			int treeItemChildNumber() const;
 			bool setData(int column, const QVariant &value);
